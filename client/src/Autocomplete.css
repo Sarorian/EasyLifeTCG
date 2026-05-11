@@ -1,0 +1,68 @@
+.ac-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.ac-input {
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-size: 16px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.ac-input:focus {
+  border-color: var(--gold);
+}
+
+.ac-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #0d1220;
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  z-index: 100;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.ac-dropdown::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ac-dropdown::-webkit-scrollbar-track {
+  background: var(--deep);
+}
+
+.ac-dropdown::-webkit-scrollbar-thumb {
+  background: var(--gold-dim);
+  border-radius: 2px;
+}
+
+.ac-option {
+  padding: 10px 14px;
+  color: var(--text);
+  font-size: 15px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.ac-option:hover,
+.ac-option-active {
+  background: rgba(200, 155, 60, 0.15);
+  color: var(--gold);
+}

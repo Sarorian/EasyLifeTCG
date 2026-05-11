@@ -1,0 +1,183 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&display=swap");
+
+.players-page {
+  min-height: 100vh;
+  background: #0a0e17;
+  font-family: "Cinzel", "Georgia", serif;
+  color: #c8aa6e;
+  padding-bottom: 80px;
+}
+
+.players-loading {
+  min-height: 100vh;
+  background: #0a0e17;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c89b3c;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.players-header {
+  background: linear-gradient(180deg, #060910 0%, #0a0e17 100%);
+  border-bottom: 1px solid rgba(200, 155, 60, 0.267);
+  padding: 32px 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.players-header-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c89b3c, transparent);
+  pointer-events: none;
+}
+
+.players-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #c89b3c;
+  margin: 0;
+  text-shadow: 0 0 40px rgba(200, 155, 60, 0.4);
+}
+
+.players-sub {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #5b5a56;
+  margin-top: 6px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+}
+
+.players-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px 0;
+}
+
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 16px;
+}
+
+/* ── Player Card ── */
+.player-card {
+  background: #0d1220;
+  border: 1px solid #1e2d45;
+  border-top: 2px solid rgba(200, 155, 60, 0.533);
+  border-radius: 2px;
+  padding: 24px;
+  position: relative;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    transform 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.player-card:hover {
+  border-color: rgba(200, 155, 60, 0.6);
+  transform: translateY(-2px);
+}
+
+.player-card-corner-tr {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 16px;
+  height: 16px;
+  border-top: 2px solid #c89b3c;
+  border-right: 2px solid #c89b3c;
+}
+
+.player-card-corner-bl {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 16px;
+  height: 16px;
+  border-bottom: 2px solid rgba(200, 155, 60, 0.267);
+  border-left: 2px solid rgba(200, 155, 60, 0.267);
+}
+
+.player-card-avatar {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, #1e2d45 0%, #0d1220 100%);
+  border: 2px solid #c89b3c;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #c89b3c;
+  text-shadow: 0 0 20px rgba(200, 155, 60, 0.5);
+  flex-shrink: 0;
+}
+
+.player-card-info {
+  flex: 1;
+}
+
+.player-card-gamertag {
+  font-size: 18px;
+  font-weight: 700;
+  color: #c8aa6e;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+.player-card-realname {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  color: #5b5a56;
+  letter-spacing: 1px;
+}
+
+.player-card-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  border-top: 1px solid #1e2d45;
+  padding-top: 16px;
+}
+
+.player-card-stat {
+  text-align: center;
+}
+
+.player-card-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #c8aa6e;
+  margin-bottom: 4px;
+}
+
+.player-card-wr {
+  color: #c89b3c;
+  text-shadow: 0 0 10px rgba(200, 155, 60, 0.3);
+}
+
+.player-card-stat-label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #5b5a56;
+  font-weight: 600;
+}

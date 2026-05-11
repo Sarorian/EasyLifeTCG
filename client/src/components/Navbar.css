@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&display=swap");
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #060910;
+  border-bottom: 1px solid rgba(200, 155, 60, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar-glow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c89b3c, transparent);
+  pointer-events: none;
+}
+
+.navbar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.navbar-link {
+  padding: 18px 20px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #5b5a56;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.navbar-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: #c89b3c;
+  transition: width 0.2s;
+}
+
+.navbar-link:hover {
+  color: #c8aa6e;
+}
+
+.navbar-link:hover::after {
+  width: 60%;
+}
+
+.navbar-link-active {
+  color: #c89b3c !important;
+}
+
+.navbar-link-active::after {
+  width: 60% !important;
+}
