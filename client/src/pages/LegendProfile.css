@@ -1,0 +1,342 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&display=swap");
+
+.lp-page {
+  min-height: 100vh;
+  background: #0a0e17;
+  font-family: "Cinzel", "Georgia", serif;
+  color: #c8aa6e;
+  padding-bottom: 80px;
+}
+
+.lp-loading {
+  min-height: 100vh;
+  background: #0a0e17;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c89b3c;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+/* ── Header ── */
+.lp-header {
+  background: linear-gradient(180deg, #060910 0%, #0a0e17 100%);
+  border-bottom: 1px solid rgba(200, 155, 60, 0.267);
+  padding: 24px 40px 32px;
+  position: relative;
+  overflow: hidden;
+  min-height: 160px;
+}
+
+.lp-header-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c89b3c, transparent);
+  pointer-events: none;
+}
+
+.lp-back {
+  background: transparent;
+  border: none;
+  color: #5b5a56;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 16px;
+  display: block;
+  transition: color 0.2s;
+}
+
+.lp-back:hover {
+  color: #c89b3c;
+}
+
+.lp-header-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.lp-champion {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #c89b3c;
+  margin: 0 0 4px;
+  text-shadow: 0 0 40px rgba(200, 155, 60, 0.5);
+}
+
+.lp-title-text {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: #5b5a56;
+  font-weight: 600;
+}
+
+/* ── Toggle ── */
+.lp-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lp-toggle-label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #5b5a56;
+}
+
+.lp-toggle {
+  width: 48px;
+  height: 26px;
+  background: #1e2d45;
+  border: 1px solid #1e2d45;
+  border-radius: 13px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  padding: 0;
+}
+
+.lp-toggle-on {
+  background: #c89b3c;
+  border-color: #c89b3c;
+}
+
+.lp-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: #5b5a56;
+  border-radius: 50%;
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+
+.lp-toggle-on .lp-toggle-thumb {
+  transform: translateX(22px);
+  background: #0a0e17;
+}
+
+/* ── Container ── */
+.lp-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 24px 0;
+}
+
+/* ── Stat Row ── */
+.lp-stat-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.lp-stat-card {
+  background: #0d1220;
+  border: 1px solid #1e2d45;
+  border-top: 2px solid rgba(200, 155, 60, 0.4);
+  border-radius: 2px;
+  padding: 16px 12px;
+  text-align: center;
+}
+
+.lp-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #c8aa6e;
+  margin-bottom: 4px;
+}
+
+.lp-stat-gold {
+  color: #c89b3c;
+  text-shadow: 0 0 15px rgba(200, 155, 60, 0.3);
+}
+
+.lp-stat-sub {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 11px;
+  color: #5b5a56;
+  margin-bottom: 4px;
+}
+
+.lp-stat-label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #5b5a56;
+  font-weight: 600;
+}
+
+/* ── Sections ── */
+.lp-section {
+  background: #0d1220;
+  border: 1px solid #1e2d45;
+  border-top: 2px solid rgba(200, 155, 60, 0.533);
+  border-radius: 2px;
+  padding: 24px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.lp-section-corner-tr {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 16px;
+  height: 16px;
+  border-top: 2px solid #c89b3c;
+  border-right: 2px solid #c89b3c;
+}
+
+.lp-section-corner-bl {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 16px;
+  height: 16px;
+  border-bottom: 2px solid rgba(200, 155, 60, 0.267);
+  border-left: 2px solid rgba(200, 155, 60, 0.267);
+}
+
+.lp-section-title {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #c89b3c;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #1e2d45;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+}
+
+.lp-empty {
+  font-family: "Rajdhani", sans-serif;
+  color: #5b5a56;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 12px 0;
+}
+
+/* ── H2H Grid ── */
+.lp-h2h-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.lp-h2h-card {
+  background: #080c15;
+  border: 1px solid #1e2d45;
+  border-radius: 2px;
+  padding: 14px;
+}
+
+.lp-h2h-opp {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #c8aa6e;
+  margin-bottom: 6px;
+}
+
+.lp-h2h-wr {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.lp-h2h-record {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 12px;
+  color: #5b5a56;
+  margin-bottom: 8px;
+}
+
+.lp-h2h-bar-wrap {
+  height: 3px;
+  background: #1e2d45;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.lp-h2h-bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+/* ── Battlefield Table ── */
+.lp-bf-table {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lp-bf-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 8px 12px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #5b5a56;
+  border-bottom: 1px solid #1e2d45;
+  margin-bottom: 4px;
+}
+
+.lp-bf-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #080c15;
+  border: 1px solid #1e2d45;
+  border-radius: 2px;
+  align-items: center;
+}
+
+.lp-bf-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #c8aa6e;
+}
+
+.lp-bf-stat {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #c8aa6e;
+}
+
+.lp-bf-stat small {
+  color: #5b5a56;
+  font-size: 11px;
+}

@@ -6,6 +6,7 @@ const links = [
   { to: "/match-report", label: "Match Report" },
   { to: "/match-history", label: "Match History" },
   { to: "/players", label: "Players" },
+  { to: "/legends", label: "Legends" },
   { to: "/admin", label: "Admin" },
 ];
 

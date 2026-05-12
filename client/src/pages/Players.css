@@ -80,6 +80,7 @@
   border-radius: 2px;
   padding: 24px;
   position: relative;
+  overflow: hidden;
   cursor: pointer;
   transition:
     border-color 0.2s,
@@ -88,7 +89,6 @@
   flex-direction: column;
   gap: 20px;
 }
-
 .player-card:hover {
   border-color: rgba(200, 155, 60, 0.6);
   transform: translateY(-2px);

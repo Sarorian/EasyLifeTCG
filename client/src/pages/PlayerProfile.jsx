@@ -13,6 +13,7 @@ export default function PlayerProfile() {
   const [matches, setMatches] = useState([]);
   const [allPlayers, setAllPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [legendBg, setLegendBg] = useState("");
 
   useEffect(() => {
     Promise.all([
@@ -31,6 +32,27 @@ export default function PlayerProfile() {
     });
   }, [gamertag]);
 
+  useEffect(() => {
+    if (!matches.length) return;
+    const legendCount = {};
+    matches.forEach((m) => {
+      const isP1 = m.player1 === gamertag;
+      const legend = isP1 ? m.player1Legend : m.player2Legend;
+      legendCount[legend] = (legendCount[legend] || 0) + 1;
+    });
+    const mostPlayed = Object.entries(legendCount).sort(
+      (a, b) => b[1] - a[1],
+    )[0]?.[0];
+    if (!mostPlayed || mostPlayed === "—") return;
+    API.get("/legends").then((res) => {
+      const match = res.data.find((l) => l.name.includes(mostPlayed));
+      if (match?.imageUrl) {
+        setLegendBg(`${match.imageUrl}?auto=format&fit=fill&q=80&w=800`);
+      }
+    });
+  }, [matches, gamertag]);
+
+  // ── Early returns AFTER all hooks ──
   if (loading) return <div className="pp-loading">Loading...</div>;
   if (!player) return <div className="pp-loading">Player not found.</div>;
 
@@ -95,22 +117,45 @@ export default function PlayerProfile() {
 
   return (
     <div className="pp-page">
-      <div className="pp-header">
+      <div
+        className="pp-header"
+        style={
+          legendBg
+            ? {
+                backgroundImage: `url(${legendBg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center top",
+              }
+            : {}
+        }
+      >
         <div className="pp-header-glow" />
-        <button className="pp-back" onClick={() => navigate("/players")}>
-          ← Roster
-        </button>
-        <div className="pp-header-inner">
-          <div className="pp-avatar">{gamertag.charAt(0).toUpperCase()}</div>
-          <div>
-            <h1 className="pp-gamertag">{gamertag}</h1>
-            <p className="pp-realname">{player.realName}</p>
+        {legendBg && (
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(180deg, rgba(6,9,16,0.72) 0%, rgba(10,14,23,0.93) 100%)",
+              zIndex: 0,
+            }}
+          />
+        )}
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <button className="pp-back" onClick={() => navigate("/players")}>
+            ← Roster
+          </button>
+          <div className="pp-header-inner">
+            <div className="pp-avatar">{gamertag.charAt(0).toUpperCase()}</div>
+            <div>
+              <h1 className="pp-gamertag">{gamertag}</h1>
+              <p className="pp-realname">{player.realName}</p>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="pp-container">
-        {/* ── Overview Stats ── */}
         <div className="pp-stat-row">
           {[
             { label: "Matches", value: totalMatches },
@@ -130,7 +175,6 @@ export default function PlayerProfile() {
         </div>
 
         <div className="pp-grid-2">
-          {/* ── Legend Stats ── */}
           <div className="pp-section">
             <div className="pp-section-corner-tr" />
             <div className="pp-section-corner-bl" />
@@ -161,7 +205,6 @@ export default function PlayerProfile() {
             })}
           </div>
 
-          {/* ── Head to Head ── */}
           <div className="pp-section">
             <div className="pp-section-corner-tr" />
             <div className="pp-section-corner-bl" />
@@ -191,18 +234,15 @@ export default function PlayerProfile() {
           </div>
         </div>
 
-        {/* ── Match History ── */}
         <div className="pp-section">
           <div className="pp-section-corner-tr" />
           <div className="pp-section-corner-bl" />
           <div className="pp-section-title">
             Match History ({matches.length})
           </div>
-
           {matches.length === 0 && (
             <div className="pp-empty">No matches yet.</div>
           )}
-
           {matches.map((m) => {
             const isP1 = m.player1 === gamertag;
             const won =
@@ -236,8 +276,6 @@ export default function PlayerProfile() {
                   </div>
                   <div className="pp-match-date">{formatDate(m.createdAt)}</div>
                 </div>
-
-                {/* Game breakdown */}
                 <div className="pp-games">
                   {m.games.map((g, i) => {
                     const myScore = isP1 ? g.player1Score : g.player2Score;
@@ -254,7 +292,6 @@ export default function PlayerProfile() {
                     const wentFirst =
                       (isP1 && g.whoWentFirst === "Player1") ||
                       (!isP1 && g.whoWentFirst === "Player2");
-
                     return (
                       <div
                         key={i}

@@ -40,16 +40,22 @@ export default function MatchReport() {
   const [duplicate, setDuplicate] = useState(null);
   const [success, setSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [legends, setLegends] = useState([]);
+  const [battlefields, setBattlefields] = useState([]);
 
   useEffect(() => {
     Promise.all([
       API.get("/players"),
       API.get("/archetypes"),
       API.get("/matches/meta/nextId"),
-    ]).then(([p, a, m]) => {
+      API.get("/legends"),
+      API.get("/battlefields"),
+    ]).then(([p, a, m, l, b]) => {
       setPlayers(p.data.filter((pl) => pl.gamertag !== "Random"));
       setArchetypes(a.data);
       setNextMatchId(m.data.nextId);
+      setLegends(l.data);
+      setBattlefields(b.data);
       setLoading(false);
     });
   }, []);
@@ -136,6 +142,9 @@ export default function MatchReport() {
 
   const playerNames = players.map((p) => p.gamertag);
   const archetypeNames = archetypes.map((a) => a.name);
+  const legendNames = legends.map((l) => l.name);
+  const battlefieldNames = battlefields.map((b) => b.name);
+
   const p1Label = form.player1 || "Player 1";
   const p2Label = form.player2 || "Player 2";
 
@@ -244,11 +253,11 @@ export default function MatchReport() {
                 </div>
                 <div className="mr-field">
                   <label className="mr-label">Legend</label>
-                  <input
-                    className="mr-input"
-                    placeholder="e.g. Viktor"
+                  <Autocomplete
+                    options={legendNames}
                     value={form.player1Legend}
-                    onChange={(e) => setField("player1Legend", e.target.value)}
+                    onChange={(val) => setField("player1Legend", val)}
+                    placeholder="Search legend..."
                   />
                 </div>
                 <div className="mr-field">
@@ -278,11 +287,11 @@ export default function MatchReport() {
                 </div>
                 <div className="mr-field">
                   <label className="mr-label">Legend</label>
-                  <input
-                    className="mr-input"
-                    placeholder="e.g. Jinx"
+                  <Autocomplete
+                    options={legendNames}
                     value={form.player2Legend}
-                    onChange={(e) => setField("player2Legend", e.target.value)}
+                    onChange={(val) => setField("player2Legend", val)}
+                    placeholder="Search legend..."
                   />
                 </div>
                 <div className="mr-field">
@@ -360,24 +369,24 @@ export default function MatchReport() {
                 <div className="mr-grid-3" style={{ marginBottom: "16px" }}>
                   <div className="mr-field">
                     <label className="mr-label">{p1Label} Battlefield</label>
-                    <input
-                      className="mr-input"
-                      placeholder="e.g. Reaver's Row"
+                    <Autocomplete
+                      options={battlefieldNames}
                       value={game.player1Battlefield}
-                      onChange={(e) =>
-                        setGameField(i, "player1Battlefield", e.target.value)
+                      onChange={(val) =>
+                        setGameField(i, "player1Battlefield", val)
                       }
+                      placeholder="Search battlefield..."
                     />
                   </div>
                   <div className="mr-field">
                     <label className="mr-label">{p2Label} Battlefield</label>
-                    <input
-                      className="mr-input"
-                      placeholder="e.g. Obelisk of Power"
+                    <Autocomplete
+                      options={battlefieldNames}
                       value={game.player2Battlefield}
-                      onChange={(e) =>
-                        setGameField(i, "player2Battlefield", e.target.value)
+                      onChange={(val) =>
+                        setGameField(i, "player2Battlefield", val)
                       }
+                      placeholder="Search battlefield..."
                     />
                   </div>
                   <div className="mr-field">

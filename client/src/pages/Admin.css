@@ -691,3 +691,12 @@
 .admin-textarea:focus {
   border-color: #c89b3c;
 }
+
+:root {
+  --deep: #080c15;
+  --gold: #c89b3c;
+  --border: #1e2d45;
+  --text: #c8aa6e;
+  --text-dim: #5b5a56;
+  --gold-dim: #a07830;
+}

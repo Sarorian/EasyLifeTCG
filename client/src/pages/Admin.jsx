@@ -1,50 +1,40 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Admin.css";
+import Autocomplete from "../Autocomplete";
 
 const API = axios.create({ baseURL: "http://localhost:5000/api" });
-
-const emptyGame = (num) => ({
-  gameNumber: num,
-  whoWentFirst: "",
-  player1Score: "",
-  player2Score: "",
-  player1Battlefield: "",
-  player2Battlefield: "",
-  turns: "",
-  gameWinner: "",
-});
 
 export default function Admin() {
   const [players, setPlayers] = useState([]);
   const [archetypes, setArchetypes] = useState([]);
   const [matches, setMatches] = useState([]);
+  const [legends, setLegends] = useState([]);
+  const [battlefields, setBattlefields] = useState([]);
   const [activeTab, setActiveTab] = useState("players");
   const [matchSearch, setMatchSearch] = useState("");
 
-  // Player form
   const [playerForm, setPlayerForm] = useState({ realName: "", gamertag: "" });
   const [playerMsg, setPlayerMsg] = useState(null);
 
-  // Archetype form
   const [archetypeForm, setArchetypeForm] = useState({
     name: "",
     description: "",
   });
   const [archetypeMsg, setArchetypeMsg] = useState(null);
 
-  // Edit modal
   const [editMatch, setEditMatch] = useState(null);
   const [editMsg, setEditMsg] = useState(null);
   const [editSubmitting, setEditSubmitting] = useState(false);
 
-  // Debug
   const [dbStats, setDbStats] = useState(null);
 
   useEffect(() => {
     fetchPlayers();
     fetchArchetypes();
     fetchMatches();
+    fetchLegends();
+    fetchBattlefields();
   }, []);
 
   const fetchPlayers = async () => {
@@ -62,6 +52,16 @@ export default function Admin() {
     setMatches(res.data);
   };
 
+  const fetchLegends = async () => {
+    const res = await API.get("/legends");
+    setLegends(res.data);
+  };
+
+  const fetchBattlefields = async () => {
+    const res = await API.get("/battlefields");
+    setBattlefields(res.data);
+  };
+
   const fetchDebug = async () => {
     const [p, a, m] = await Promise.all([
       API.get("/players"),
@@ -75,7 +75,6 @@ export default function Admin() {
     });
   };
 
-  // ── Player submit ──
   const handleAddPlayer = async () => {
     try {
       const nextId = await API.get("/players/meta/nextId");
@@ -109,7 +108,6 @@ export default function Admin() {
     fetchPlayers();
   };
 
-  // ── Archetype submit ──
   const handleAddArchetype = async () => {
     try {
       await API.post("/archetypes", archetypeForm);
@@ -134,7 +132,6 @@ export default function Admin() {
     fetchArchetypes();
   };
 
-  // ── Match delete ──
   const handleDeleteMatch = async (matchId) => {
     if (
       !window.confirm(
@@ -147,7 +144,6 @@ export default function Admin() {
     fetchPlayers();
   };
 
-  // ── Edit modal ──
   const openEdit = (match) => {
     setEditMatch(JSON.parse(JSON.stringify(match)));
     setEditMsg(null);
@@ -158,9 +154,8 @@ export default function Admin() {
     setEditMsg(null);
   };
 
-  const setEditField = (key, val) => {
+  const setEditField = (key, val) =>
     setEditMatch((m) => ({ ...m, [key]: val }));
-  };
 
   const setEditGameField = (i, key, val) => {
     setEditMatch((m) => {
@@ -188,7 +183,6 @@ export default function Admin() {
     }
   };
 
-  // ── Filtered matches ──
   const filteredMatches = matches.filter((m) => {
     const q = matchSearch.toLowerCase();
     return (
@@ -209,6 +203,11 @@ export default function Admin() {
       year: "numeric",
     });
 
+  const legendNames = legends.map((l) => l.name);
+  const battlefieldNames = battlefields.map((b) => b.name);
+  const archetypeNames = archetypes.map((a) => a.name);
+  const playerNames = players.map((p) => p.gamertag);
+
   const tabs = ["players", "archetypes", "matches", "debug"];
 
   return (
@@ -222,7 +221,6 @@ export default function Admin() {
       </div>
 
       <div className="admin-container">
-        {/* ── Tabs ── */}
         <div className="admin-tabs">
           {tabs.map((tab) => (
             <button
@@ -254,10 +252,10 @@ export default function Admin() {
               )}
               <div className="admin-grid-2">
                 <div className="admin-field">
-                  <label className="admin-label">Prefered Name</label>
+                  <label className="admin-label">Preferred Name</label>
                   <input
                     className="admin-input"
-                    placeholder="Search"
+                    placeholder="e.g. John Smith"
                     value={playerForm.realName}
                     onChange={(e) =>
                       setPlayerForm((f) => ({ ...f, realName: e.target.value }))
@@ -268,7 +266,7 @@ export default function Admin() {
                   <label className="admin-label">Gamertag</label>
                   <input
                     className="admin-input"
-                    placeholder="Search"
+                    placeholder="e.g. Jinx420"
                     value={playerForm.gamertag}
                     onChange={(e) =>
                       setPlayerForm((f) => ({ ...f, gamertag: e.target.value }))
@@ -343,7 +341,7 @@ export default function Admin() {
                   <label className="admin-label">Description (optional)</label>
                   <input
                     className="admin-input"
-                    placeholder=""
+                    placeholder="e.g. Slow, reactive gameplan"
                     value={archetypeForm.description}
                     onChange={(e) =>
                       setArchetypeForm((f) => ({
@@ -397,7 +395,6 @@ export default function Admin() {
             <div className="admin-section-title">
               Match Records ({matches.length})
             </div>
-
             <input
               className="admin-input"
               placeholder="Search by match ID, player, legend, or winner..."
@@ -405,7 +402,6 @@ export default function Admin() {
               onChange={(e) => setMatchSearch(e.target.value)}
               style={{ marginBottom: "16px" }}
             />
-
             <div className="admin-match-list">
               {filteredMatches.map((m) => (
                 <div key={m.matchId} className="admin-match-item">
@@ -513,15 +509,15 @@ export default function Admin() {
                 </div>
               )}
 
-              {/* Reporter / Format / Games */}
               <div className="modal-section-title">Match Details</div>
               <div className="modal-grid-3">
                 <div className="admin-field">
                   <label className="admin-label">Reporter</label>
-                  <input
-                    className="admin-input"
+                  <Autocomplete
+                    options={playerNames}
                     value={editMatch.reporter}
-                    onChange={(e) => setEditField("reporter", e.target.value)}
+                    onChange={(val) => setEditField("reporter", val)}
+                    placeholder="Search reporter..."
                   />
                 </div>
                 <div className="admin-field">
@@ -552,67 +548,67 @@ export default function Admin() {
                 </div>
               </div>
 
-              {/* Players */}
               <div className="modal-grid-2" style={{ marginTop: "16px" }}>
+                {/* Player 1 */}
                 <div>
                   <div className="modal-player-label-p1">Player 1</div>
                   <div className="admin-field" style={{ marginBottom: "10px" }}>
                     <label className="admin-label">Name</label>
-                    <input
-                      className="admin-input"
+                    <Autocomplete
+                      options={playerNames}
                       value={editMatch.player1}
-                      onChange={(e) => setEditField("player1", e.target.value)}
+                      onChange={(val) => setEditField("player1", val)}
+                      placeholder="Search player..."
                     />
                   </div>
                   <div className="admin-field" style={{ marginBottom: "10px" }}>
                     <label className="admin-label">Legend</label>
-                    <input
-                      className="admin-input"
+                    <Autocomplete
+                      options={legendNames}
                       value={editMatch.player1Legend}
-                      onChange={(e) =>
-                        setEditField("player1Legend", e.target.value)
-                      }
+                      onChange={(val) => setEditField("player1Legend", val)}
+                      placeholder="Search legend..."
                     />
                   </div>
                   <div className="admin-field">
                     <label className="admin-label">Archetype</label>
-                    <input
-                      className="admin-input"
+                    <Autocomplete
+                      options={archetypeNames}
                       value={editMatch.player1Archetype}
-                      onChange={(e) =>
-                        setEditField("player1Archetype", e.target.value)
-                      }
+                      onChange={(val) => setEditField("player1Archetype", val)}
+                      placeholder="Search archetype..."
                     />
                   </div>
                 </div>
+
+                {/* Player 2 */}
                 <div>
                   <div className="modal-player-label-p2">Player 2</div>
                   <div className="admin-field" style={{ marginBottom: "10px" }}>
                     <label className="admin-label">Name</label>
-                    <input
-                      className="admin-input"
+                    <Autocomplete
+                      options={["Random", ...playerNames]}
                       value={editMatch.player2}
-                      onChange={(e) => setEditField("player2", e.target.value)}
+                      onChange={(val) => setEditField("player2", val)}
+                      placeholder="Search or Random..."
                     />
                   </div>
                   <div className="admin-field" style={{ marginBottom: "10px" }}>
                     <label className="admin-label">Legend</label>
-                    <input
-                      className="admin-input"
+                    <Autocomplete
+                      options={legendNames}
                       value={editMatch.player2Legend}
-                      onChange={(e) =>
-                        setEditField("player2Legend", e.target.value)
-                      }
+                      onChange={(val) => setEditField("player2Legend", val)}
+                      placeholder="Search legend..."
                     />
                   </div>
                   <div className="admin-field">
                     <label className="admin-label">Archetype</label>
-                    <input
-                      className="admin-input"
+                    <Autocomplete
+                      options={archetypeNames}
                       value={editMatch.player2Archetype}
-                      onChange={(e) =>
-                        setEditField("player2Archetype", e.target.value)
-                      }
+                      onChange={(val) => setEditField("player2Archetype", val)}
+                      placeholder="Search archetype..."
                     />
                   </div>
                 </div>
@@ -678,30 +674,24 @@ export default function Admin() {
                   <div className="modal-grid-3" style={{ marginTop: "10px" }}>
                     <div className="admin-field">
                       <label className="admin-label">P1 Battlefield</label>
-                      <input
-                        className="admin-input"
+                      <Autocomplete
+                        options={battlefieldNames}
                         value={game.player1Battlefield}
-                        onChange={(e) =>
-                          setEditGameField(
-                            i,
-                            "player1Battlefield",
-                            e.target.value,
-                          )
+                        onChange={(val) =>
+                          setEditGameField(i, "player1Battlefield", val)
                         }
+                        placeholder="Search battlefield..."
                       />
                     </div>
                     <div className="admin-field">
                       <label className="admin-label">P2 Battlefield</label>
-                      <input
-                        className="admin-input"
+                      <Autocomplete
+                        options={battlefieldNames}
                         value={game.player2Battlefield}
-                        onChange={(e) =>
-                          setEditGameField(
-                            i,
-                            "player2Battlefield",
-                            e.target.value,
-                          )
+                        onChange={(val) =>
+                          setEditGameField(i, "player2Battlefield", val)
                         }
+                        placeholder="Search battlefield..."
                       />
                     </div>
                     <div className="admin-field">
@@ -737,7 +727,6 @@ export default function Admin() {
                 </div>
               ))}
 
-              {/* Match Winner */}
               <div className="admin-field" style={{ marginTop: "16px" }}>
                 <label className="admin-label">Match Winner</label>
                 <select
@@ -754,7 +743,6 @@ export default function Admin() {
                 </select>
               </div>
 
-              {/* Notes */}
               <div className="admin-field" style={{ marginTop: "16px" }}>
                 <label className="admin-label">Notes</label>
                 <textarea

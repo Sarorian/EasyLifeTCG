@@ -5,8 +5,11 @@ import MatchReport from "./pages/MatchReport";
 import MatchHistory from "./pages/MatchHistory";
 import Players from "./pages/Players";
 import PlayerProfile from "./pages/PlayerProfile";
+import Legends from "./pages/Legends";
+import LegendProfile from "./pages/LegendProfile";
 import Admin from "./pages/Admin";
 import "./App.css";
+import LegendMatchup from "./pages/LegendMatchup";
 
 export default function App() {
   return (
@@ -19,7 +22,13 @@ export default function App() {
           <Route path="/match-history" element={<MatchHistory />} />
           <Route path="/players" element={<Players />} />
           <Route path="/players/:gamertag" element={<PlayerProfile />} />
+          <Route path="/legends" element={<Legends />} />
+          <Route path="/legends/:legendName" element={<LegendProfile />} />
           <Route path="/admin" element={<Admin />} />
+          <Route
+            path="/legends/:legendName/vs/:opponentName"
+            element={<LegendMatchup />}
+          />
         </Routes>
       </main>
     </div>

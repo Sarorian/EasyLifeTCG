@@ -11,7 +11,11 @@ app.use(express.json());
 const matchRoutes = require("./routes/matches");
 const playerRoutes = require("./routes/players");
 const archetypeRoutes = require("./routes/archetypes");
+const legendRoutes = require("./routes/legends");
+const battlefieldRoutes = require("./routes/battlefields");
 
+app.use("/api/legends", legendRoutes);
+app.use("/api/battlefields", battlefieldRoutes);
 app.use("/api/matches", matchRoutes);
 app.use("/api/players", playerRoutes);
 app.use("/api/archetypes", archetypeRoutes);
