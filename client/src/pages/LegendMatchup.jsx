@@ -14,6 +14,7 @@ export default function LegendMatchup() {
   const [matches, setMatches] = useState([]);
   const [myLegend, setMyLegend] = useState(null);
   const [oppLegend, setOppLegend] = useState(null);
+  const [battlefields, setBattlefields] = useState([]);
   const [includeRandom, setIncludeRandom] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -21,13 +22,34 @@ export default function LegendMatchup() {
   const oppChampionName = opponent.split(",")[0].trim();
 
   useEffect(() => {
-    Promise.all([API.get("/matches"), API.get("/legends")]).then(([m, l]) => {
+    Promise.all([
+      API.get("/matches"),
+      API.get("/legends"),
+      API.get("/battlefields"),
+    ]).then(([m, l, b]) => {
       setMatches(m.data);
-      setMyLegend(l.data.find((leg) => leg.name === name) || null);
-      setOppLegend(l.data.find((leg) => leg.name === opponent) || null);
+      setMyLegend(
+        l.data.find(
+          (leg) => leg.name === name || leg.name.startsWith(championName),
+        ) || null,
+      );
+      setOppLegend(
+        l.data.find(
+          (leg) =>
+            leg.name === opponent || leg.name.startsWith(oppChampionName),
+        ) || null,
+      );
+      setBattlefields(b.data);
       setLoading(false);
     });
   }, [name, opponent]);
+
+  const getBfImage = (bfName) => {
+    const bf = battlefields.find((b) => b.name === bfName?.trim());
+    return bf?.imageUrl
+      ? `${bf.imageUrl}?auto=format&fit=fill&q=80&w=120`
+      : null;
+  };
 
   if (loading) return <div className="lmu-loading">Loading...</div>;
 
@@ -39,7 +61,6 @@ export default function LegendMatchup() {
       m.player1Legend === oppChampionName || m.player1Legend === opponent;
     const oppIsP2 =
       m.player2Legend === oppChampionName || m.player2Legend === opponent;
-
     const valid = (myIsP1 && oppIsP2) || (myIsP2 && oppIsP1);
     if (!valid) return false;
     if (!includeRandom && (m.player1 === "Random" || m.player2 === "Random"))
@@ -102,7 +123,6 @@ export default function LegendMatchup() {
       const gameWon =
         (isP1 && g.gameWinner === "Player1") ||
         (!isP1 && g.gameWinner === "Player2");
-
       const key = `${myBf} vs ${oppBf}`;
       if (!bfStats[key])
         bfStats[key] = {
@@ -125,7 +145,6 @@ export default function LegendMatchup() {
     });
   });
 
-  // ── Match history ──
   const formatDate = (d) =>
     new Date(d).toLocaleDateString("en-US", {
       month: "short",
@@ -136,7 +155,6 @@ export default function LegendMatchup() {
   const myBgUrl = myLegend?.imageUrl
     ? `${myLegend.imageUrl}?auto=format&fit=fill&q=80&w=1200`
     : null;
-
   const oppBgUrl = oppLegend?.imageUrl
     ? `${oppLegend.imageUrl}?auto=format&fit=fill&q=80&w=400`
     : null;
@@ -177,7 +195,6 @@ export default function LegendMatchup() {
           </button>
           <div className="lmu-header-inner">
             <div className="lmu-matchup-title">
-              {/* My legend */}
               <div className="lmu-side">
                 {myBgUrl && (
                   <div
@@ -213,7 +230,6 @@ export default function LegendMatchup() {
                 )}
               </div>
 
-              {/* Opponent legend */}
               <div className="lmu-side lmu-side-right">
                 <div>
                   <div className="lmu-champ-name lmu-champ-red">
@@ -236,7 +252,6 @@ export default function LegendMatchup() {
               </div>
             </div>
 
-            {/* Random toggle */}
             <div className="lmu-toggle-wrap">
               <span className="lmu-toggle-label">Include Random opponents</span>
               <button
@@ -279,7 +294,6 @@ export default function LegendMatchup() {
           ))}
         </div>
 
-        {/* ── No data message ── */}
         {total === 0 && (
           <div className="lmu-section">
             <div className="lmu-empty">
@@ -318,9 +332,44 @@ export default function LegendMatchup() {
                   const sWR = s.second
                     ? ((s.secondWins / s.second) * 100).toFixed(1)
                     : "—";
+                  const [myBfName, oppBfName] = key.split(" vs ");
+                  const myBfImg = getBfImage(myBfName);
+                  const oppBfImg = getBfImage(oppBfName);
                   return (
                     <div key={key} className="lmu-bf-row">
-                      <span className="lmu-bf-name">{key}</span>
+                      <span className="lmu-bf-name">
+                        {myBfImg && (
+                          <img
+                            src={myBfImg}
+                            alt={myBfName}
+                            style={{
+                              width: "48px",
+                              height: "34px",
+                              objectFit: "cover",
+                              borderRadius: "2px",
+                              border: "1px solid #1E2D45",
+                            }}
+                          />
+                        )}
+                        <span>{myBfName}</span>
+                        <span style={{ color: "#5B5A56", fontSize: "11px" }}>
+                          vs
+                        </span>
+                        {oppBfImg && (
+                          <img
+                            src={oppBfImg}
+                            alt={oppBfName}
+                            style={{
+                              width: "48px",
+                              height: "34px",
+                              objectFit: "cover",
+                              borderRadius: "2px",
+                              border: "1px solid #1E2D45",
+                            }}
+                          />
+                        )}
+                        <span>{oppBfName}</span>
+                      </span>
                       <span
                         className="lmu-bf-stat"
                         style={{
@@ -370,7 +419,6 @@ export default function LegendMatchup() {
                 (!isP1 && m.matchWinner === "Player2");
               const myPlayer = isP1 ? m.player1 : m.player2;
               const oppPlayer = isP1 ? m.player2 : m.player1;
-
               return (
                 <div
                   key={m.matchId}
@@ -408,6 +456,8 @@ export default function LegendMatchup() {
                       const wentFirst =
                         (isP1 && g.whoWentFirst === "Player1") ||
                         (!isP1 && g.whoWentFirst === "Player2");
+                      const myBfImg = getBfImage(myBf);
+                      const oppBfImg = getBfImage(oppBf);
                       return (
                         <div
                           key={i}
@@ -431,8 +481,47 @@ export default function LegendMatchup() {
                               {oppScore}
                             </span>
                           </div>
-                          <div className="lmu-game-bf">
-                            {myBf} vs {oppBf}
+                          <div
+                            className="lmu-game-bf"
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                            }}
+                          >
+                            {myBfImg && (
+                              <img
+                                src={myBfImg}
+                                alt={myBf}
+                                style={{
+                                  width: "36px",
+                                  height: "26px",
+                                  objectFit: "cover",
+                                  borderRadius: "2px",
+                                  border: "1px solid #1E2D45",
+                                }}
+                              />
+                            )}
+                            <span>{myBf}</span>
+                            <span
+                              style={{ color: "#5B5A56", fontSize: "11px" }}
+                            >
+                              vs
+                            </span>
+                            {oppBfImg && (
+                              <img
+                                src={oppBfImg}
+                                alt={oppBf}
+                                style={{
+                                  width: "36px",
+                                  height: "26px",
+                                  objectFit: "cover",
+                                  borderRadius: "2px",
+                                  border: "1px solid #1E2D45",
+                                }}
+                              />
+                            )}
+                            <span>{oppBf}</span>
                           </div>
                           <div className="lmu-game-meta">
                             {g.turns} turns ·{" "}

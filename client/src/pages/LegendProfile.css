@@ -298,7 +298,7 @@
 
 .lp-bf-header {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 3fr 1fr 1fr 1fr;
   gap: 8px;
   padding: 8px 12px;
   font-family: "Rajdhani", sans-serif;
@@ -313,7 +313,7 @@
 
 .lp-bf-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 3fr 1fr 1fr 1fr;
   gap: 8px;
   padding: 10px 12px;
   background: #080c15;
@@ -327,6 +327,8 @@
   font-size: 14px;
   font-weight: 700;
   color: #c8aa6e;
+  display: flex;
+  align-items: center;
 }
 
 .lp-bf-stat {

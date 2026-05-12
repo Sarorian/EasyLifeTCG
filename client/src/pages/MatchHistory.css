@@ -1,0 +1,425 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&display=swap");
+
+.mh-page {
+  min-height: 100vh;
+  background: #0a0e17;
+  font-family: "Cinzel", "Georgia", serif;
+  color: #c8aa6e;
+  padding-bottom: 80px;
+}
+
+.mh-loading {
+  min-height: 100vh;
+  background: #0a0e17;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c89b3c;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+/* ── Header ── */
+.mh-header {
+  background: linear-gradient(180deg, #060910 0%, #0a0e17 100%);
+  border-bottom: 1px solid rgba(200, 155, 60, 0.267);
+  padding: 32px 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mh-header-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c89b3c, transparent);
+  pointer-events: none;
+}
+
+.mh-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #c89b3c;
+  margin: 0;
+  text-shadow: 0 0 40px rgba(200, 155, 60, 0.4);
+}
+
+.mh-sub {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #5b5a56;
+  margin-top: 6px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+}
+
+/* ── Container ── */
+.mh-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 0;
+}
+
+.mh-search {
+  width: 100%;
+  background: #0d1220;
+  border: 1px solid #1e2d45;
+  border-radius: 2px;
+  padding: 14px 20px;
+  color: #c8aa6e;
+  font-size: 16px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+  outline: none;
+  box-sizing: border-box;
+  margin-bottom: 24px;
+  transition: border-color 0.2s;
+}
+
+.mh-search:focus {
+  border-color: #c89b3c;
+}
+
+.mh-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Match Card ── */
+.mh-match {
+  border: 1px solid #1e2d45;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.mh-match-header {
+  position: relative;
+  height: 120px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.mh-match-header:hover .mh-match-overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(6, 9, 16, 0.75) 0%,
+    rgba(6, 9, 16, 0.55) 50%,
+    rgba(6, 9, 16, 0.75) 100%
+  );
+}
+
+/* Legend art backgrounds */
+.mh-legend-bg {
+  position: absolute;
+  top: 0;
+  width: 45%;
+  height: 100%;
+  background-size: cover;
+  background-position: center 20%;
+}
+
+.mh-legend-bg-left {
+  left: 0;
+}
+.mh-legend-bg-right {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.mh-match-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(6, 9, 16, 0.85) 0%,
+    rgba(6, 9, 16, 0.6) 50%,
+    rgba(6, 9, 16, 0.85) 100%
+  );
+  transition: background 0.2s;
+  z-index: 1;
+}
+
+.mh-match-content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+}
+
+/* ── Player Sides ── */
+.mh-player-side {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mh-player-left {
+  align-items: flex-start;
+}
+.mh-player-right {
+  align-items: flex-end;
+}
+
+.mh-side-winner .mh-player-name {
+  color: #c89b3c;
+}
+.mh-side-loser .mh-player-name {
+  color: #5b5a56;
+}
+
+.mh-player-name {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.mh-player-legend {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #c8aa6e;
+  letter-spacing: 1px;
+}
+
+.mh-player-arch {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 12px;
+  color: #5b5a56;
+  letter-spacing: 1px;
+}
+
+.mh-winner-badge {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #c89b3c;
+  border: 1px solid rgba(200, 155, 60, 0.4);
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+/* ── Center ── */
+.mh-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 100px;
+}
+
+.mh-match-id {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #5b5a56;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.mh-vs {
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: #5b5a56;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+}
+
+.mh-games-score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.mh-score-win {
+  color: #27ae60;
+}
+.mh-score-loss {
+  color: #c0392b;
+}
+.mh-score-dash {
+  color: #1e2d45;
+  font-size: 20px;
+}
+
+.mh-format {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #5b5a56;
+  text-transform: uppercase;
+}
+
+.mh-date {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 11px;
+  color: #5b5a56;
+}
+
+.mh-expand-icon {
+  font-size: 10px;
+  color: rgba(200, 155, 60, 0.5);
+  margin-top: 4px;
+}
+
+/* ── Games Section ── */
+.mh-games {
+  background: #080c15;
+  border-top: 1px solid #1e2d45;
+}
+
+.mh-games-header {
+  display: grid;
+  grid-template-columns: 40px 120px 1fr auto 1fr 80px 120px;
+  gap: 8px;
+  padding: 10px 16px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #5b5a56;
+  border-bottom: 1px solid #1e2d45;
+}
+
+.mh-game-row {
+  display: grid;
+  grid-template-columns: 40px 120px 1fr auto 1fr 80px 120px;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(30, 45, 69, 0.5);
+  align-items: center;
+}
+
+.mh-game-row:last-of-type {
+  border-bottom: none;
+}
+
+.mh-game-num {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #c89b3c;
+  letter-spacing: 1px;
+}
+
+.mh-game-first {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mh-first-p1 {
+  color: #0bc4e3;
+}
+.mh-first-p2 {
+  color: #c0392b;
+}
+
+.mh-game-bf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c8aa6e;
+}
+
+.mh-game-bf-right {
+  justify-content: flex-end;
+}
+
+.mh-bf-img {
+  width: 52px;
+  height: 37px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid #1e2d45;
+  flex-shrink: 0;
+}
+
+.mh-game-score-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  justify-content: center;
+}
+
+.mh-game-turns {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  color: #5b5a56;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mh-game-winner {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: right;
+}
+
+.mh-winner-p1 {
+  color: #0bc4e3;
+}
+.mh-winner-p2 {
+  color: #c0392b;
+}
+
+/* ── Match Footer ── */
+.mh-match-footer {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 16px;
+  border-top: 1px solid #1e2d45;
+  background: #0a0e17;
+  flex-wrap: wrap;
+}
+
+.mh-footer-label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #5b5a56;
+}
+
+.mh-footer-value {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c8aa6e;
+}
+
+/* ── Empty ── */
+.mh-empty {
+  font-family: "Rajdhani", sans-serif;
+  color: #5b5a56;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-align: center;
+  padding: 48px 0;
+}

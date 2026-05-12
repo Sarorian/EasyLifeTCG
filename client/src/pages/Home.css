@@ -1,14 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&display=swap");
+
 .home {
   min-height: 100vh;
   background: #0a0e17;
   font-family: "Cinzel", "Georgia", serif;
+  color: #c8aa6e;
+  padding-bottom: 80px;
 }
 
+/* ── Hero ── */
 .home-hero {
-  text-align: center;
-  padding: 100px 24px 60px;
   position: relative;
+  height: 340px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 20%;
+  filter: saturate(0.7);
+}
+
+.home-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(6, 9, 16, 0.5) 0%,
+    rgba(10, 14, 23, 0.97) 100%
+  );
 }
 
 .home-hero-glow {
@@ -17,57 +42,102 @@
   left: 50%;
   transform: translateX(-50%);
   width: 800px;
-  height: 300px;
-  background: radial-gradient(
-    ellipse at top,
-    rgba(200, 155, 60, 0.08) 0%,
-    transparent 70%
-  );
-  pointer-events: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c89b3c, transparent);
+  z-index: 2;
+}
+
+.home-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
 }
 
 .home-title {
-  font-size: 56px;
+  font-size: 48px;
   font-weight: 700;
   letter-spacing: 8px;
   text-transform: uppercase;
   color: #c89b3c;
-  text-shadow: 0 0 60px rgba(200, 155, 60, 0.4);
-  margin-bottom: 16px;
+  text-shadow: 0 0 60px rgba(200, 155, 60, 0.5);
+  margin: 0 0 12px;
 }
 
 .home-subtitle {
-  font-size: 13px;
-  letter-spacing: 5px;
+  font-size: 12px;
+  letter-spacing: 4px;
   text-transform: uppercase;
   color: #5b5a56;
   font-family: "Rajdhani", sans-serif;
   font-weight: 600;
+  margin-bottom: 0;
 }
 
 .home-divider {
   width: 200px;
   height: 1px;
   background: linear-gradient(90deg, transparent, #c89b3c, transparent);
-  margin: 32px auto;
+  margin: 20px auto;
 }
 
-.home-desc {
-  font-size: 15px;
-  color: #c8aa6e;
-  font-family: "Rajdhani", sans-serif;
-  font-weight: 500;
-  letter-spacing: 1px;
-  opacity: 0.7;
+.home-hero-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
 }
 
-.home-stats {
+.home-btn-primary {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #c89b3c 0%, #a07830 100%);
+  border: none;
+  border-radius: 2px;
+  color: #0a0e17;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.home-btn-primary:hover {
+  opacity: 0.85;
+}
+
+.home-btn-secondary {
+  padding: 12px 28px;
+  background: transparent;
+  border: 1px solid rgba(200, 155, 60, 0.4);
+  border-radius: 2px;
+  color: #c89b3c;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.home-btn-secondary:hover {
+  background: rgba(200, 155, 60, 0.1);
+  border-color: #c89b3c;
+}
+
+/* ── Container ── */
+.home-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 24px 0;
+}
+
+/* ── Stats Row ── */
+.home-stats-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 24px 80px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .home-stat-card {
@@ -75,12 +145,62 @@
   border: 1px solid #1e2d45;
   border-top: 2px solid rgba(200, 155, 60, 0.5);
   border-radius: 2px;
-  padding: 28px 20px;
+  padding: 20px 16px;
   text-align: center;
   position: relative;
 }
 
 .home-stat-corner-tr {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid #c89b3c;
+  border-right: 2px solid #c89b3c;
+}
+
+.home-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #c8aa6e;
+  margin-bottom: 6px;
+}
+
+.home-stat-gold {
+  color: #c89b3c;
+  text-shadow: 0 0 20px rgba(200, 155, 60, 0.3);
+}
+
+.home-stat-label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #5b5a56;
+  font-weight: 600;
+}
+
+/* ── Two column grid ── */
+.home-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* ── Sections ── */
+.home-section {
+  background: #0d1220;
+  border: 1px solid #1e2d45;
+  border-top: 2px solid rgba(200, 155, 60, 0.533);
+  border-radius: 2px;
+  padding: 24px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.home-section-corner-tr {
   position: absolute;
   top: -1px;
   right: -1px;
@@ -90,7 +210,167 @@
   border-right: 2px solid #c89b3c;
 }
 
-.home-stat-value {
+.home-section-corner-bl {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 16px;
+  height: 16px;
+  border-bottom: 2px solid rgba(200, 155, 60, 0.267);
+  border-left: 2px solid rgba(200, 155, 60, 0.267);
+}
+
+.home-section-title {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #c89b3c;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #1e2d45;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+}
+
+.home-empty {
+  font-family: "Rajdhani", sans-serif;
+  color: #5b5a56;
+  font-size: 14px;
+  text-align: center;
+  padding: 12px 0;
+  letter-spacing: 1px;
+}
+
+/* ── Leaderboard Rows ── */
+.home-leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #080c15;
+  border: 1px solid #1e2d45;
+  border-radius: 2px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.home-leaderboard-row:hover {
+  border-color: rgba(200, 155, 60, 0.4);
+}
+
+.home-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #080c15;
+  border: 1px solid #1e2d45;
+  border-radius: 2px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.home-legend-row:hover {
+  border-color: rgba(200, 155, 60, 0.4);
+}
+
+.home-rank {
+  font-family: "Cinzel", serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #5b5a56;
+  min-width: 28px;
+}
+
+.home-rank-gold {
+  color: #c89b3c;
+}
+.home-rank-silver {
+  color: #8a9ba8;
+}
+.home-rank-bronze {
+  color: #a0522d;
+}
+
+.home-lb-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #c8aa6e;
+  flex: 1;
+  letter-spacing: 1px;
+}
+
+.home-lb-record {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  color: #5b5a56;
+  font-weight: 600;
+}
+
+.home-lb-wr {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  min-width: 52px;
+  text-align: right;
+}
+
+.home-legend-thumb {
+  width: 40px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid #1e2d45;
+  flex-shrink: 0;
+}
+
+/* ── Fun Facts ── */
+.home-facts-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.home-fact-card {
+  background: #0d1220;
+  border: 1px solid #1e2d45;
+  border-top: 2px solid rgba(200, 155, 60, 0.3);
+  border-radius: 2px;
+  padding: 24px 20px 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-fact-card:hover {
+  border-color: rgba(200, 155, 60, 0.6);
+}
+
+.home-fact-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.home-fact-bf-img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 2px;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+.home-fact-value {
   font-size: 36px;
   font-weight: 700;
   color: #c89b3c;
@@ -98,11 +378,115 @@
   text-shadow: 0 0 20px rgba(200, 155, 60, 0.3);
 }
 
-.home-stat-label {
+.home-fact-label {
+  font-family: "Rajdhani", sans-serif;
   font-size: 11px;
   letter-spacing: 3px;
   text-transform: uppercase;
   color: #5b5a56;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.home-fact-sub {
   font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  color: #5b5a56;
   font-weight: 600;
+}
+
+/* ── Recent Matches ── */
+.home-recent-match {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: #080c15;
+  border: 1px solid #1e2d45;
+  border-radius: 2px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.home-recent-match:hover {
+  border-color: rgba(200, 155, 60, 0.3);
+}
+
+.home-recent-id {
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #c89b3c;
+  min-width: 32px;
+}
+
+.home-recent-player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.home-recent-player-right {
+  justify-content: flex-end;
+}
+
+.home-recent-legend-img {
+  width: 32px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid #1e2d45;
+  flex-shrink: 0;
+}
+
+.home-recent-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.home-recent-winner {
+  color: #c89b3c;
+}
+.home-recent-loser {
+  color: #5b5a56;
+}
+
+.home-recent-legend {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 12px;
+  color: #5b5a56;
+}
+
+.home-recent-score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 22px;
+  font-weight: 700;
+  min-width: 60px;
+  justify-content: center;
+}
+
+.home-score-dash {
+  color: #1e2d45;
+  font-size: 16px;
+}
+
+.mh-score-win {
+  color: #27ae60;
+}
+.mh-score-loss {
+  color: #c0392b;
+}
+
+.home-recent-date {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 12px;
+  color: #5b5a56;
+  min-width: 60px;
+  text-align: right;
 }

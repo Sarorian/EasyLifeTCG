@@ -14,12 +14,18 @@ export default function LegendProfile() {
   const [legend, setLegend] = useState(null);
   const [includeRandom, setIncludeRandom] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [battlefields, setBattlefields] = useState([]);
 
   useEffect(() => {
-    Promise.all([API.get("/matches"), API.get("/legends")]).then(([m, l]) => {
+    Promise.all([
+      API.get("/matches"),
+      API.get("/legends"),
+      API.get("/battlefields"),
+    ]).then(([m, l, b]) => {
       setMatches(m.data);
       const found = l.data.find((leg) => leg.name === name);
       setLegend(found || null);
+      setBattlefields(b.data);
       setLoading(false);
     });
   }, [name]);
@@ -85,6 +91,12 @@ export default function LegendProfile() {
   const secondWR = wentSecondTotal
     ? ((wentSecondWins / wentSecondTotal) * 100).toFixed(1)
     : "—";
+  const getBfImage = (bfName) => {
+    const bf = battlefields.find((b) => b.name === bfName);
+    return bf?.imageUrl
+      ? `${bf.imageUrl}?auto=format&fit=fill&q=80&w=120`
+      : null;
+  };
 
   // ── Battlefield stats ──
   const bfStats = {};
@@ -323,18 +335,33 @@ export default function LegendProfile() {
                   (s.wins / (s.wins + s.losses)) *
                   100
                 ).toFixed(1);
-                const firstWR = s.first
+                const fWR = s.first
                   ? ((s.firstWins / s.first) * 100).toFixed(1)
                   : "—";
-                const secondWR = s.second
+                const sWR = s.second
                   ? ((s.secondWins / s.second) * 100).toFixed(1)
                   : "—";
-                const g1WR = s.game1
-                  ? ((s.game1Wins / s.game1) * 100).toFixed(1)
-                  : "—";
+                const bfImg = getBfImage(bf);
                 return (
                   <div key={bf} className="lp-bf-row">
-                    <span className="lp-bf-name">{bf}</span>
+                    <span className="lp-bf-name">
+                      {bfImg && (
+                        <img
+                          src={bfImg}
+                          alt={bf}
+                          style={{
+                            width: "48px",
+                            height: "34px",
+                            objectFit: "cover",
+                            borderRadius: "2px",
+                            marginRight: "10px",
+                            border: "1px solid #1E2D45",
+                            verticalAlign: "middle",
+                          }}
+                        />
+                      )}
+                      {bf}
+                    </span>
                     <span
                       className="lp-bf-stat"
                       style={{
@@ -348,15 +375,15 @@ export default function LegendProfile() {
                       </small>
                     </span>
                     <span className="lp-bf-stat">
-                      {firstWR}
-                      {firstWR !== "—" ? "%" : ""}{" "}
+                      {fWR}
+                      {fWR !== "—" ? "%" : ""}{" "}
                       <small>
                         ({s.firstWins}/{s.first})
                       </small>
                     </span>
                     <span className="lp-bf-stat">
-                      {secondWR}
-                      {secondWR !== "—" ? "%" : ""}{" "}
+                      {sWR}
+                      {sWR !== "—" ? "%" : ""}{" "}
                       <small>
                         ({s.secondWins}/{s.second})
                       </small>
