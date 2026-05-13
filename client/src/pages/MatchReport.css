@@ -419,3 +419,83 @@
   font-family: "Rajdhani", sans-serif;
   font-weight: 600;
 }
+
+@media (max-width: 768px) {
+  .mr-header {
+    padding: 20px 16px 16px;
+  }
+  .mr-header-title {
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+  .mr-container {
+    padding: 20px 12px 0;
+  }
+
+  .mr-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .mr-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .mr-score-row {
+    grid-template-columns: 1fr auto 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .mh-container {
+    padding: 20px 12px 0;
+  }
+  .mh-match-header {
+    height: auto;
+    min-height: 100px;
+  }
+
+  .mh-match-content {
+    grid-template-columns: 1fr auto 1fr;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .mh-player-name {
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  .mh-player-legend {
+    font-size: 12px;
+  }
+  .mh-player-arch {
+    display: none;
+  }
+  .mh-winner-badge {
+    display: none;
+  }
+  .mh-games-score {
+    font-size: 22px;
+  }
+
+  .mh-games-header {
+    grid-template-columns: 30px 80px 1fr auto 60px;
+    font-size: 9px;
+  }
+
+  .mh-game-row {
+    grid-template-columns: 30px 80px 1fr auto 60px;
+    font-size: 11px;
+  }
+
+  .mh-games-header span:nth-child(5),
+  .mh-games-header span:nth-child(7),
+  .mh-game-row > div:nth-child(5),
+  .mh-game-row > div:nth-child(7) {
+    display: none;
+  }
+
+  .mh-bf-img {
+    width: 36px;
+    height: 26px;
+  }
+}

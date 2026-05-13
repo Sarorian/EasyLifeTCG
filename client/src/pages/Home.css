@@ -490,3 +490,48 @@
   min-width: 60px;
   text-align: right;
 }
+
+@media (max-width: 768px) {
+  .home-title {
+    font-size: 32px;
+    letter-spacing: 4px;
+  }
+  .home-hero {
+    height: 280px;
+  }
+  .home-hero-btns {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .home-btn-primary,
+  .home-btn-secondary {
+    width: 200px;
+  }
+
+  .home-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .home-facts-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-recent-match {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .home-recent-player {
+    flex: 1;
+    min-width: 120px;
+  }
+  .home-recent-date {
+    width: 100%;
+    text-align: left;
+  }
+}

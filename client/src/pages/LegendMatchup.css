@@ -499,3 +499,51 @@
 .lmu-game-l {
   color: #c0392b;
 }
+
+@media (max-width: 768px) {
+  .lmu-header {
+    padding: 16px 16px 20px;
+    min-height: 140px;
+  }
+  .lmu-container {
+    padding: 20px 12px 0;
+  }
+
+  .lmu-stat-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lmu-matchup-title {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .lmu-mini-art {
+    display: none;
+  }
+
+  .lmu-header-inner {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .lmu-bf-header,
+  .lmu-bf-row {
+    grid-template-columns: 2fr 1fr 1fr;
+    font-size: 11px;
+  }
+
+  .lmu-bf-header span:last-child,
+  .lmu-bf-row span:last-child {
+    display: none;
+  }
+
+  .lmu-game {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .lmu-game-bf {
+    font-size: 11px;
+  }
+}

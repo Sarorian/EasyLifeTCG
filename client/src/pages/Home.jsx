@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./Home.css";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+import API from "../api";
 
 export default function Home() {
   const [matches, setMatches] = useState([]);

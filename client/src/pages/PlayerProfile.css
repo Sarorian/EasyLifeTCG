@@ -113,6 +113,7 @@
   grid-template-columns: repeat(6, 1fr);
   gap: 12px;
   margin-bottom: 20px;
+  align-items: stretch;
 }
 
 .pp-stat-card {
@@ -120,18 +121,26 @@
   border: 1px solid #1e2d45;
   border-top: 2px solid rgba(200, 155, 60, 0.4);
   border-radius: 2px;
-  padding: 16px 12px;
+  padding: 16px 8px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
 }
 
 .pp-stat-value {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: #c8aa6e;
   margin-bottom: 6px;
   word-break: break-word;
-  font-size: clamp(14px, 2vw, 22px); /* shrinks on long text */
+  line-height: 1.3;
+  overflow-wrap: break-word;
+  width: 100%;
 }
+
 .pp-stat-gold {
   color: #c89b3c;
   text-shadow: 0 0 15px rgba(200, 155, 60, 0.3);
@@ -144,6 +153,11 @@
   text-transform: uppercase;
   color: #5b5a56;
   font-weight: 600;
+}
+
+.pp-stat-small {
+  font-size: 14px;
+  line-height: 1.3;
 }
 
 /* ── Two column grid ── */
@@ -488,4 +502,46 @@
 }
 .pp-game-l {
   color: #c0392b;
+}
+
+@media (max-width: 768px) {
+  .pp-header {
+    padding: 16px 16px 20px;
+  }
+  .pp-gamertag {
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+  .pp-container {
+    padding: 20px 12px 0;
+  }
+
+  .pp-stat-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pp-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .pp-match-top {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .pp-match-vs {
+    flex-wrap: wrap;
+  }
+
+  .pp-game {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .pp-game-bf {
+    font-size: 11px;
+  }
+  .pp-game-meta {
+    font-size: 10px;
+  }
 }

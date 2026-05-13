@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import "./LegendProfile.css";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+import API from "../api";
 
 export default function LegendProfile() {
   const { legendName } = useParams();
@@ -48,6 +48,36 @@ export default function LegendProfile() {
   if (!relevantMatches.length && !legend) {
     return <div className="lp-loading">Legend not found.</div>;
   }
+
+  let preBoardWins = 0,
+    preBoardTotal = 0;
+  let postBoardWins = 0,
+    postBoardTotal = 0;
+
+  relevantMatches.forEach((m) => {
+    const isP1 = m.player1Legend === championName || m.player1Legend === name;
+    m.games.forEach((g) => {
+      const gameWon =
+        (isP1 && g.gameWinner === "Player1") ||
+        (!isP1 && g.gameWinner === "Player2");
+      const isPostBoard = m.isBo3 && g.gameNumber >= 2;
+
+      if (isPostBoard) {
+        postBoardTotal++;
+        if (gameWon) postBoardWins++;
+      } else {
+        preBoardTotal++;
+        if (gameWon) preBoardWins++;
+      }
+    });
+  });
+
+  const preBoardWR = preBoardTotal
+    ? ((preBoardWins / preBoardTotal) * 100).toFixed(1)
+    : "—";
+  const postBoardWR = postBoardTotal
+    ? ((postBoardWins / postBoardTotal) * 100).toFixed(1)
+    : "—";
 
   // ── Overall stats ──
   let wins = 0,
@@ -145,9 +175,32 @@ export default function LegendProfile() {
     const won =
       (isP1 && m.matchWinner === "Player1") ||
       (!isP1 && m.matchWinner === "Player2");
-    if (!h2h[oppLegend]) h2h[oppLegend] = { wins: 0, losses: 0 };
+    if (!h2h[oppLegend])
+      h2h[oppLegend] = {
+        wins: 0,
+        losses: 0,
+        preBoardWins: 0,
+        preBoardTotal: 0,
+        postBoardWins: 0,
+        postBoardTotal: 0,
+      };
     if (won) h2h[oppLegend].wins++;
     else h2h[oppLegend].losses++;
+
+    // Per game board stats
+    m.games.forEach((g) => {
+      const gameWon =
+        (isP1 && g.gameWinner === "Player1") ||
+        (!isP1 && g.gameWinner === "Player2");
+      const isPostBoard = m.isBo3 && g.gameNumber >= 2;
+      if (isPostBoard) {
+        h2h[oppLegend].postBoardTotal++;
+        if (gameWon) h2h[oppLegend].postBoardWins++;
+      } else {
+        h2h[oppLegend].preBoardTotal++;
+        if (gameWon) h2h[oppLegend].preBoardWins++;
+      }
+    });
   });
 
   const h2hEntries = Object.entries(h2h).sort((a, b) => {
@@ -261,6 +314,146 @@ export default function LegendProfile() {
           ))}
         </div>
 
+        {/* ── Pre vs Post Board ── */}
+        {(preBoardTotal > 0 || postBoardTotal > 0) && (
+          <div className="lp-section">
+            <div className="lp-section-corner-tr" />
+            <div className="lp-section-corner-bl" />
+            <div className="lp-section-title">Pre-Board vs Post-Board</div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "16px",
+              }}
+            >
+              <div
+                style={{
+                  background: "#080C15",
+                  border: "1px solid #1E2D45",
+                  borderLeft: "3px solid #0BC4E3",
+                  borderRadius: "2px",
+                  padding: "20px",
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: "11px",
+                    letterSpacing: "3px",
+                    textTransform: "uppercase",
+                    color: "#0BC4E3",
+                    fontWeight: "700",
+                    marginBottom: "12px",
+                  }}
+                >
+                  Pre-Board · Game 1
+                </div>
+                <div
+                  style={{
+                    fontSize: "32px",
+                    fontWeight: "700",
+                    color:
+                      parseFloat(preBoardWR) >= 50
+                        ? "#27AE60"
+                        : parseFloat(preBoardWR) < 50 && preBoardWR !== "—"
+                          ? "#C0392B"
+                          : "#C8AA6E",
+                    marginBottom: "6px",
+                  }}
+                >
+                  {preBoardWR}
+                  {preBoardWR !== "—" ? "%" : ""}
+                </div>
+                <div
+                  style={{
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: "14px",
+                    color: "#5B5A56",
+                    fontWeight: "600",
+                  }}
+                >
+                  {preBoardWins}W — {preBoardTotal - preBoardWins}L ·{" "}
+                  {preBoardTotal} games
+                </div>
+              </div>
+              <div
+                style={{
+                  background: "#080C15",
+                  border: "1px solid #1E2D45",
+                  borderLeft: "3px solid #C89B3C",
+                  borderRadius: "2px",
+                  padding: "20px",
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: "11px",
+                    letterSpacing: "3px",
+                    textTransform: "uppercase",
+                    color: "#C89B3C",
+                    fontWeight: "700",
+                    marginBottom: "12px",
+                  }}
+                >
+                  Post-Board · Games 2 & 3
+                </div>
+                <div
+                  style={{
+                    fontSize: "32px",
+                    fontWeight: "700",
+                    color:
+                      parseFloat(postBoardWR) >= 50
+                        ? "#27AE60"
+                        : parseFloat(postBoardWR) < 50 && postBoardWR !== "—"
+                          ? "#C0392B"
+                          : "#C8AA6E",
+                    marginBottom: "6px",
+                  }}
+                >
+                  {postBoardWR}
+                  {postBoardWR !== "—" ? "%" : ""}
+                </div>
+                <div
+                  style={{
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: "14px",
+                    color: "#5B5A56",
+                    fontWeight: "600",
+                  }}
+                >
+                  {postBoardWins}W — {postBoardTotal - postBoardWins}L ·{" "}
+                  {postBoardTotal} games
+                </div>
+              </div>
+            </div>
+            {postBoardTotal > 0 &&
+              preBoardTotal > 0 &&
+              preBoardWR !== "—" &&
+              postBoardWR !== "—" && (
+                <div
+                  style={{
+                    marginTop: "12px",
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: "13px",
+                    color: "#5B5A56",
+                    textAlign: "center",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  {parseFloat(postBoardWR) > parseFloat(preBoardWR)
+                    ? `▲ Win rate improves by ${(parseFloat(postBoardWR) - parseFloat(preBoardWR)).toFixed(1)}% post-board`
+                    : parseFloat(postBoardWR) < parseFloat(preBoardWR)
+                      ? `▼ Win rate drops by ${(parseFloat(preBoardWR) - parseFloat(postBoardWR)).toFixed(1)}% post-board`
+                      : "Win rate unchanged pre vs post board"}
+                </div>
+              )}
+          </div>
+        )}
+
         {/* ── Head to Head ── */}
         <div className="lp-section">
           <div className="lp-section-corner-tr" />
@@ -273,6 +466,12 @@ export default function LegendProfile() {
             {h2hEntries.map(([opp, rec]) => {
               const t = rec.wins + rec.losses;
               const w = ((rec.wins / t) * 100).toFixed(1);
+              const pbWR = rec.preBoardTotal
+                ? ((rec.preBoardWins / rec.preBoardTotal) * 100).toFixed(1)
+                : "—";
+              const postWR = rec.postBoardTotal
+                ? ((rec.postBoardWins / rec.postBoardTotal) * 100).toFixed(1)
+                : "—";
               return (
                 <div
                   key={opp}
@@ -295,6 +494,26 @@ export default function LegendProfile() {
                   </div>
                   <div className="lp-h2h-record">
                     {rec.wins}W — {rec.losses}L
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "8px",
+                      marginTop: "8px",
+                      fontSize: "11px",
+                      fontFamily: "'Rajdhani', sans-serif",
+                      fontWeight: "600",
+                    }}
+                  >
+                    <span style={{ color: "#0BC4E3" }}>
+                      Pre: {pbWR}
+                      {pbWR !== "—" ? "%" : ""}
+                    </span>
+                    <span style={{ color: "#5B5A56" }}>·</span>
+                    <span style={{ color: "#C89B3C" }}>
+                      Post: {postWR}
+                      {postWR !== "—" ? "%" : ""}
+                    </span>
                   </div>
                   <div className="lp-h2h-bar-wrap">
                     <div

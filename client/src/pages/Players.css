@@ -181,3 +181,15 @@
   color: #5b5a56;
   font-weight: 600;
 }
+
+@media (max-width: 768px) {
+  .players-container {
+    padding: 20px 12px 0;
+  }
+  .players-grid {
+    grid-template-columns: 1fr;
+  }
+  .player-card-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

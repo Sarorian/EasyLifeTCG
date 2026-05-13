@@ -700,3 +700,40 @@
   --text-dim: #5b5a56;
   --gold-dim: #a07830;
 }
+
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 20px 12px 0;
+  }
+  .admin-grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .admin-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .admin-tab {
+    white-space: nowrap;
+    padding: 10px 16px;
+  }
+
+  .admin-match-item {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .admin-match-info {
+    width: 100%;
+  }
+  .admin-match-actions {
+    margin-left: auto;
+  }
+
+  .modal {
+    max-height: 95vh;
+  }
+  .modal-grid-2,
+  .modal-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}

@@ -70,3 +70,22 @@
 .navbar-link-active::after {
   width: 60% !important;
 }
+
+@media (max-width: 768px) {
+  .navbar-inner {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding: 0 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .navbar-inner::-webkit-scrollbar {
+    display: none;
+  }
+  .navbar-link {
+    padding: 16px 12px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+}

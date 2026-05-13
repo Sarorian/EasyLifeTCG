@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+
 import "./MatchReport.css";
 import Autocomplete from "../Autocomplete";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+import API from "../api";
 
 const emptyGame = (num) => ({
   gameNumber: num,
@@ -28,8 +28,10 @@ export default function MatchReport() {
     player2: "",
     player1Legend: "",
     player1Archetype: "",
+    player1Archetype2: "",
     player2Legend: "",
     player2Archetype: "",
+    player2Archetype2: "",
     isBo3: true,
     gamesPlayed: "",
     matchWinner: "",
@@ -88,15 +90,26 @@ export default function MatchReport() {
     });
   };
 
+  const sortArchetype = (primary, secondary) => {
+    if (!secondary) return primary;
+    return [primary, secondary].sort().join(" / ");
+  };
+
   const buildPayload = (force = false) => ({
     matchId: nextMatchId,
     reporter: form.reporter,
     player1: form.player1,
     player2: form.player2 || "Random",
     player1Legend: form.player1Legend,
-    player1Archetype: form.player1Archetype,
+    player1Archetype: sortArchetype(
+      form.player1Archetype,
+      form.player1Archetype2,
+    ),
     player2Legend: form.player2Legend,
-    player2Archetype: form.player2Archetype,
+    player2Archetype: sortArchetype(
+      form.player2Archetype,
+      form.player2Archetype2,
+    ),
     isBo3: form.isBo3,
     gamesPlayed: parseInt(form.gamesPlayed),
     games: games.map((g) => ({
@@ -122,9 +135,11 @@ export default function MatchReport() {
         player2: "",
         player1Legend: "",
         player1Archetype: "",
+        player1Archetype2: "",
         player2Legend: "",
         player2Archetype: "",
-        isBo3: false,
+        player2Archetype2: "",
+        isBo3: true,
         gamesPlayed: "",
         matchWinner: "",
         notes: "",
@@ -260,13 +275,25 @@ export default function MatchReport() {
                     placeholder="Search legend..."
                   />
                 </div>
+                {/* Player 1 Archetypes */}
                 <div className="mr-field">
                   <label className="mr-label">Archetype</label>
                   <Autocomplete
                     options={archetypeNames}
                     value={form.player1Archetype}
                     onChange={(val) => setField("player1Archetype", val)}
-                    placeholder="Search archetype..."
+                    placeholder="Primary archetype..."
+                  />
+                </div>
+                <div className="mr-field">
+                  <label className="mr-label">2nd Archetype (optional)</label>
+                  <Autocomplete
+                    options={archetypeNames.filter(
+                      (a) => a !== form.player1Archetype,
+                    )}
+                    value={form.player1Archetype2}
+                    onChange={(val) => setField("player1Archetype2", val)}
+                    placeholder="e.g. Control, Aggro..."
                   />
                 </div>
               </div>
@@ -300,7 +327,18 @@ export default function MatchReport() {
                     options={archetypeNames}
                     value={form.player2Archetype}
                     onChange={(val) => setField("player2Archetype", val)}
-                    placeholder="Search archetype..."
+                    placeholder="Primary archetype..."
+                  />
+                </div>
+                <div className="mr-field">
+                  <label className="mr-label">2nd Archetype (optional)</label>
+                  <Autocomplete
+                    options={archetypeNames.filter(
+                      (a) => a !== form.player2Archetype,
+                    )}
+                    value={form.player2Archetype2}
+                    onChange={(val) => setField("player2Archetype2", val)}
+                    placeholder="e.g. Control, Aggro..."
                   />
                 </div>
               </div>

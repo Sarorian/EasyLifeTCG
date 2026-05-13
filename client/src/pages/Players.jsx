@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import "./Players.css";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+import API from "../api";
 
 export default function Players() {
   const [players, setPlayers] = useState([]);

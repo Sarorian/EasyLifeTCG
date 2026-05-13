@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./LegendMatchup.css";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+import API from "../api";
 
 export default function LegendMatchup() {
   const { legendName, opponentName } = useParams();
@@ -100,6 +99,35 @@ export default function LegendMatchup() {
       }
     });
   });
+
+  let preBoardWins = 0,
+    preBoardTotal = 0;
+  let postBoardWins = 0,
+    postBoardTotal = 0;
+
+  relevantMatches.forEach((m) => {
+    const isP1 = m.player1Legend === championName || m.player1Legend === name;
+    m.games.forEach((g) => {
+      const gameWon =
+        (isP1 && g.gameWinner === "Player1") ||
+        (!isP1 && g.gameWinner === "Player2");
+      const isPostBoard = m.isBo3 && g.gameNumber >= 2;
+      if (isPostBoard) {
+        postBoardTotal++;
+        if (gameWon) postBoardWins++;
+      } else {
+        preBoardTotal++;
+        if (gameWon) preBoardWins++;
+      }
+    });
+  });
+
+  const preBoardWR = preBoardTotal
+    ? ((preBoardWins / preBoardTotal) * 100).toFixed(1)
+    : "—";
+  const postBoardWR = postBoardTotal
+    ? ((postBoardWins / postBoardTotal) * 100).toFixed(1)
+    : "—";
 
   const total = wins + losses;
   const wr = total ? ((wins / total) * 100).toFixed(1) : "—";

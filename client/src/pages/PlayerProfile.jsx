@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import "./PlayerProfile.css";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+import API from "../api";
 
 export default function PlayerProfile() {
   const { gamertag } = useParams();
@@ -162,7 +162,7 @@ export default function PlayerProfile() {
             { label: "Wins", value: player.wins },
             { label: "Losses", value: player.losses },
             { label: "Win Rate", value: `${player.winRate}%`, gold: true },
-            { label: "Top Legend", value: mostPlayedLegend },
+            { label: "Top Legend", value: mostPlayedLegend.split(",")[0] },
             { label: "Top Archetype", value: mostPlayedArchetype },
           ].map(({ label, value, gold }) => (
             <div key={label} className="pp-stat-card">

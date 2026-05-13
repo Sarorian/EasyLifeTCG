@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import "./Admin.css";
 import Autocomplete from "../Autocomplete";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+import API from "../api";
 
 export default function Admin() {
   const [players, setPlayers] = useState([]);
@@ -168,7 +167,21 @@ export default function Admin() {
   const handleEditSubmit = async () => {
     setEditSubmitting(true);
     try {
-      await API.put(`/matches/${editMatch.matchId}`, editMatch);
+      // Sort combined archetypes alphabetically if they contain " / "
+      const sortedMatch = { ...editMatch };
+      if (sortedMatch.player1Archetype?.includes(" / ")) {
+        sortedMatch.player1Archetype = sortedMatch.player1Archetype
+          .split(" / ")
+          .sort()
+          .join(" / ");
+      }
+      if (sortedMatch.player2Archetype?.includes(" / ")) {
+        sortedMatch.player2Archetype = sortedMatch.player2Archetype
+          .split(" / ")
+          .sort()
+          .join(" / ");
+      }
+      await API.put(`/matches/${editMatch.matchId}`, sortedMatch);
       setEditMsg({ type: "success", text: "Match updated successfully." });
       fetchMatches();
       fetchPlayers();

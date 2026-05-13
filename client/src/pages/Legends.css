@@ -121,9 +121,9 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(6, 9, 16, 0.3) 0%,
-    rgba(6, 9, 16, 0.85) 60%,
-    rgba(6, 9, 16, 0.97) 100%
+    rgba(6, 9, 16, 0.1) 0%,
+    rgba(6, 9, 16, 0.6) 60%,
+    rgba(6, 9, 16, 0.92) 100%
   );
   z-index: 1;
 }
@@ -132,7 +132,7 @@
   background: linear-gradient(
     180deg,
     rgba(6, 9, 16, 0.6) 0%,
-    rgba(6, 9, 16, 0.95) 60%,
+    rgba(6, 9, 16, 0.92) 60%,
     rgba(6, 9, 16, 0.99) 100%
   );
 }
@@ -193,4 +193,16 @@
   text-transform: uppercase;
   border-top: 1px solid rgba(200, 155, 60, 0.1);
   padding-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .lg-container {
+    padding: 20px 12px 0;
+  }
+  .lg-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .lg-card {
+    height: 220px;
+  }
 }

@@ -1,0 +1,10 @@
+scraper.js
+scraper-debug.png
+scraper-filters.png
+scraper-modal.png
+scraper-step1b.png
+scraper-step2.png
+scraper-step3.png
+scraper-step4.png
+node_modules/
+.env

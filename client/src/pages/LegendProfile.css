@@ -342,3 +342,42 @@
   color: #5b5a56;
   font-size: 11px;
 }
+
+@media (max-width: 768px) {
+  .lp-header {
+    padding: 16px 16px 20px;
+    min-height: 120px;
+  }
+  .lp-champion {
+    font-size: 24px;
+    letter-spacing: 3px;
+  }
+  .lp-container {
+    padding: 20px 12px 0;
+  }
+
+  .lp-stat-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lp-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .lp-h2h-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lp-bf-header,
+  .lp-bf-row {
+    grid-template-columns: 2fr 1fr 1fr;
+    font-size: 11px;
+  }
+
+  .lp-bf-header span:last-child,
+  .lp-bf-row span:last-child {
+    display: none;
+  }
+}
