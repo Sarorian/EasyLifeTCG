@@ -4,11 +4,10 @@
     <meta charset="utf-8" />
     <script>
       var base = "/EasyLifeTCG";
-      var path = window.location.pathname.slice(base.length) || "/";
-      var query = window.location.search;
-      var hash = window.location.hash;
-      sessionStorage.redirect = path + query + hash;
-      window.location.replace(base + "/");
+      var l = window.location;
+      var path = l.pathname.slice(base.length) || "/";
+      sessionStorage.redirect = path + l.search + l.hash;
+      l.replace(base + "/");
     </script>
   </head>
   <body></body>

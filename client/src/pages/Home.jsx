@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
-
 import API from "../api";
 
 export default function Home() {
@@ -10,6 +9,7 @@ export default function Home() {
   const [legends, setLegends] = useState([]);
   const [battlefields, setBattlefields] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [includeRandom, setIncludeRandom] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,13 +27,18 @@ export default function Home() {
     });
   }, []);
 
+  // ── Filter matches based on toggle ──
+  const filteredMatches = includeRandom
+    ? matches
+    : matches.filter((m) => m.player1 !== "Random" && m.player2 !== "Random");
+
   // ── Derived stats ──
-  const totalMatches = matches.length;
+  const totalMatches = filteredMatches.length;
   const activePlayers = players.length;
 
   // Most played legend
   const legendCount = {};
-  matches.forEach((m) => {
+  filteredMatches.forEach((m) => {
     if (m.player1Legend)
       legendCount[m.player1Legend] = (legendCount[m.player1Legend] || 0) + 1;
     if (m.player2Legend)
@@ -45,14 +50,9 @@ export default function Home() {
     l.name.startsWith(mostPlayedLegend.split(",")[0]),
   );
 
-  // Top player by win rate (min 1 match)
-  const topPlayer = [...players]
-    .filter((p) => p.wins + p.losses >= 1)
-    .sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate))[0];
-
   // Most played battlefield
   const bfCount = {};
-  matches.forEach((m) => {
+  filteredMatches.forEach((m) => {
     m.games?.forEach((g) => {
       if (g.player1Battlefield)
         bfCount[g.player1Battlefield] =
@@ -66,10 +66,10 @@ export default function Home() {
     Object.entries(bfCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "—";
   const mostPlayedBfData = battlefields.find((b) => b.name === mostPlayedBf);
 
-  // First turn win rate across all games
+  // First turn win rate
   let firstWins = 0,
     firstTotal = 0;
-  matches.forEach((m) => {
+  filteredMatches.forEach((m) => {
     m.games?.forEach((g) => {
       firstTotal++;
       if (g.whoWentFirst === "Player1" && g.gameWinner === "Player1")
@@ -82,9 +82,9 @@ export default function Home() {
     ? ((firstWins / firstTotal) * 100).toFixed(1)
     : "—";
 
-  // Longest match by turns
+  // Longest game
   let longestGame = null;
-  matches.forEach((m) => {
+  filteredMatches.forEach((m) => {
     m.games?.forEach((g) => {
       if (!longestGame || g.turns > longestGame.turns) {
         longestGame = {
@@ -97,15 +97,15 @@ export default function Home() {
     });
   });
 
-  // Most dominant player (most wins)
+  // Most wins player
   const mostWins = [...players].sort((a, b) => b.wins - a.wins)[0];
 
-  // Recent matches (last 5)
-  const recentMatches = matches.slice(0, 5);
+  // Recent matches
+  const recentMatches = filteredMatches.slice(0, 5);
 
-  // Legend win rates for leaderboard
+  // Legend leaderboard
   const legendStats = {};
-  matches.forEach((m) => {
+  filteredMatches.forEach((m) => {
     ["player1", "player2"].forEach((side) => {
       const legend = m[`${side}Legend`];
       const won =
@@ -117,40 +117,6 @@ export default function Home() {
       else legendStats[legend].losses++;
     });
   });
-
-  // ── Longest win streak per player ──
-  const streaks = {};
-  players.forEach((p) => {
-    const playerMatches = matches
-      .filter((m) => m.player1 === p.gamertag || m.player2 === p.gamertag)
-      .sort((a, b) => a.matchId - b.matchId);
-
-    let currentStreak = 0;
-    let longestStreak = 0;
-
-    playerMatches.forEach((m) => {
-      const isP1 = m.player1 === p.gamertag;
-      const won =
-        (isP1 && m.matchWinner === "Player1") ||
-        (!isP1 && m.matchWinner === "Player2");
-      if (won) {
-        currentStreak++;
-        if (currentStreak > longestStreak) longestStreak = currentStreak;
-      } else {
-        currentStreak = 0;
-      }
-    });
-
-    streaks[p.gamertag] = { longest: longestStreak, current: currentStreak };
-  });
-
-  const longestStreakPlayer = Object.entries(streaks).sort(
-    (a, b) => b[1].longest - a[1].longest,
-  )[0];
-
-  const currentStreakPlayer = Object.entries(streaks)
-    .filter(([, s]) => s.current > 0)
-    .sort((a, b) => b[1].current - a[1].current)[0];
   const legendLeaderboard = Object.entries(legendStats)
     .map(([name, s]) => ({
       name,
@@ -160,6 +126,34 @@ export default function Home() {
     .filter((l) => l.wins + l.losses >= 1)
     .sort((a, b) => parseFloat(b.wr) - parseFloat(a.wr))
     .slice(0, 5);
+
+  // Win streaks — uses filteredMatches so Random games don't count toward streaks either
+  const streaks = {};
+  players.forEach((p) => {
+    const playerMatches = filteredMatches
+      .filter((m) => m.player1 === p.gamertag || m.player2 === p.gamertag)
+      .sort((a, b) => a.matchId - b.matchId);
+    let currentStreak = 0,
+      longestStreak = 0;
+    playerMatches.forEach((m) => {
+      const isP1 = m.player1 === p.gamertag;
+      const won =
+        (isP1 && m.matchWinner === "Player1") ||
+        (!isP1 && m.matchWinner === "Player2");
+      if (won) {
+        currentStreak++;
+        if (currentStreak > longestStreak) longestStreak = currentStreak;
+      } else currentStreak = 0;
+    });
+    streaks[p.gamertag] = { longest: longestStreak, current: currentStreak };
+  });
+
+  const longestStreakPlayer = Object.entries(streaks).sort(
+    (a, b) => b[1].longest - a[1].longest,
+  )[0];
+  const currentStreakPlayer = Object.entries(streaks)
+    .filter(([, s]) => s.current > 0)
+    .sort((a, b) => b[1].current - a[1].current)[0];
 
   const getLegendImg = (legendName) => {
     if (!legendName) return null;
@@ -227,6 +221,56 @@ export default function Home() {
               onClick={() => navigate("/match-history")}
             >
               View History
+            </button>
+          </div>
+          {/* ── Random Toggle ── */}
+          <div
+            style={{
+              marginTop: "16px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "12px",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Rajdhani', sans-serif",
+                fontSize: "13px",
+                color: "#5B5A56",
+                letterSpacing: "1px",
+                fontWeight: "600",
+              }}
+            >
+              Include Random opponents
+            </span>
+            <button
+              onClick={() => setIncludeRandom(!includeRandom)}
+              style={{
+                width: "48px",
+                height: "26px",
+                background: includeRandom ? "#C89B3C" : "#1E2D45",
+                border: `1px solid ${includeRandom ? "#C89B3C" : "#1E2D45"}`,
+                borderRadius: "13px",
+                cursor: "pointer",
+                position: "relative",
+                transition: "background 0.2s",
+                padding: 0,
+              }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  top: "3px",
+                  left: includeRandom ? "23px" : "3px",
+                  width: "18px",
+                  height: "18px",
+                  background: includeRandom ? "#0A0E17" : "#5B5A56",
+                  borderRadius: "50%",
+                  transition: "left 0.2s, background 0.2s",
+                  display: "block",
+                }}
+              />
             </button>
           </div>
         </div>
@@ -364,28 +408,41 @@ export default function Home() {
               <div className="home-fact-sub">{mostWins.gamertag}</div>
             </div>
           )}
-          {mostPlayedBfData && (
-            <div className="home-fact-card">
-              {mostPlayedBfData.imageUrl && (
-                <img
-                  src={`${mostPlayedBfData.imageUrl}?auto=format&fit=fill&q=80&w=400`}
-                  alt={mostPlayedBf}
-                  className="home-fact-bf-img"
-                />
-              )}
-              <div className="home-fact-value">{bfCount[mostPlayedBf]}</div>
-              <div className="home-fact-label">Most Played Battlefield</div>
-              <div className="home-fact-sub">{mostPlayedBf}</div>
+          {longestStreakPlayer && longestStreakPlayer[1].longest > 0 && (
+            <div
+              className="home-fact-card"
+              onClick={() => navigate(`/players/${longestStreakPlayer[0]}`)}
+            >
+              <div className="home-fact-icon">🔥</div>
+              <div className="home-fact-value">
+                {longestStreakPlayer[1].longest}
+              </div>
+              <div className="home-fact-label">Longest Win Streak</div>
+              <div className="home-fact-sub">{longestStreakPlayer[0]}</div>
             </div>
           )}
-          <div className="home-fact-card">
-            <div className="home-fact-icon">🎯</div>
-            <div className="home-fact-value">{firstWR}%</div>
-            <div className="home-fact-label">First Turn Win Rate</div>
-            <div className="home-fact-sub">
-              Across {firstTotal} games played
+          {currentStreakPlayer ? (
+            <div
+              className="home-fact-card"
+              onClick={() => navigate(`/players/${currentStreakPlayer[0]}`)}
+            >
+              <div className="home-fact-icon">⚡</div>
+              <div className="home-fact-value">
+                {currentStreakPlayer[1].current}
+              </div>
+              <div className="home-fact-label">Current Hot Streak</div>
+              <div className="home-fact-sub">{currentStreakPlayer[0]}</div>
             </div>
-          </div>
+          ) : (
+            <div className="home-fact-card">
+              <div className="home-fact-icon">🎯</div>
+              <div className="home-fact-value">{firstWR}%</div>
+              <div className="home-fact-label">First Turn Win Rate</div>
+              <div className="home-fact-sub">
+                Across {firstTotal} games played
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ── Recent Matches ── */}
@@ -407,7 +464,6 @@ export default function Home() {
                 onClick={() => navigate("/match-history")}
               >
                 <div className="home-recent-id">#{m.matchId}</div>
-
                 <div className="home-recent-player">
                   {p1Img && (
                     <img
@@ -425,7 +481,6 @@ export default function Home() {
                     <div className="home-recent-legend">{m.player1Legend}</div>
                   </div>
                 </div>
-
                 <div className="home-recent-score">
                   <span className={p1Won ? "mh-score-win" : "mh-score-loss"}>
                     {m.games.filter((g) => g.gameWinner === "Player1").length}
@@ -435,7 +490,6 @@ export default function Home() {
                     {m.games.filter((g) => g.gameWinner === "Player2").length}
                   </span>
                 </div>
-
                 <div className="home-recent-player home-recent-player-right">
                   <div>
                     <div
@@ -453,7 +507,6 @@ export default function Home() {
                     />
                   )}
                 </div>
-
                 <div className="home-recent-date">
                   {formatDate(m.createdAt)}
                 </div>
