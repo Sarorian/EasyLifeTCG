@@ -10,6 +10,7 @@ import LegendProfile from "./pages/LegendProfile";
 import Admin from "./pages/Admin";
 import "./App.css";
 import LegendMatchup from "./pages/LegendMatchup";
+import EloLeaderboard from "./pages/EloLeaderboard";
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
             path="/legends/:legendName/vs/:opponentName"
             element={<LegendMatchup />}
           />
+          <Route path="/elo" element={<EloLeaderboard />} />
         </Routes>
       </main>
     </div>

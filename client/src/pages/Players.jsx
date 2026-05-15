@@ -142,6 +142,12 @@ export default function Players() {
                         {p.winRate}%
                       </div>
                       <div className="player-card-stat-label">Win Rate</div>
+                      <div className="player-card-stat">
+                        <div className="player-card-stat-value">
+                          {player.elo ?? 1500}
+                        </div>
+                        <div className="player-card-stat-label">ELO</div>
+                      </div>
                     </div>
                   </div>
                 </div>

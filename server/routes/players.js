@@ -104,4 +104,16 @@ router.delete("/:gamertag", async (req, res) => {
   }
 });
 
+// GET /api/players/elo-leaderboard
+router.get("/elo-leaderboard", async (req, res) => {
+  try {
+    const players = await Player.find({ gamertag: { $ne: "Random" } })
+      .sort({ elo: -1 })
+      .select("gamertag realName elo eloHistory wins losses");
+    res.json(players);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

@@ -1,21 +1,27 @@
 const mongoose = require("mongoose");
 
-const playerSchema = new mongoose.Schema({
-  // Identity
+const PlayerSchema = new mongoose.Schema({
   playerId: { type: Number, required: true, unique: true },
-  realName: { type: String, required: true },
+  realName: { type: String, default: "" },
   gamertag: { type: String, required: true, unique: true },
-
-  // Record
-  wins: { type: Number, default: 0, min: 0 },
-  losses: { type: Number, default: 0, min: 0 },
-
-  // Match history — stores matchIds, populate when needed
-  matchList: [{ type: Number, ref: "Match" }],
-
-  // Metadata
+  wins: { type: Number, default: 0 },
+  losses: { type: Number, default: 0 },
+  matchList: [{ type: Number }],
+  elo: { type: Number, default: 1500 },
+  eloHistory: [
+    {
+      matchId: Number,
+      elo: Number,
+      change: Number,
+      opponent: String,
+      won: Boolean,
+      date: Date,
+    },
+  ],
   createdAt: { type: Date, default: Date.now },
 });
+
+// Metadata
 
 // Virtual: win rate calculated on the fly without storing it
 playerSchema.virtual("winRate").get(function () {

@@ -3,6 +3,13 @@ const router = express.Router();
 const Match = require("../models/Match");
 const Player = require("../models/Player");
 
+function calculateElo(playerElo, opponentElo, won, k = 32) {
+  const expected = 1 / (1 + Math.pow(10, (opponentElo - playerElo) / 400));
+  const score = won ? 1 : 0;
+  const change = Math.round(k * (score - expected));
+  return { newElo: playerElo + change, change };
+}
+
 // ─── GET all matches ───────────────────────────────────────────────────────────
 router.get("/", async (req, res) => {
   try {
@@ -201,6 +208,54 @@ router.post("/", async (req, res) => {
       },
     );
 
+    // ── ELO calculation (skip Random opponents) ──
+    if (
+      player1Doc &&
+      player2Doc &&
+      player1Doc.gamertag !== "Random" &&
+      player2Doc.gamertag !== "Random"
+    ) {
+      const p1Won = matchWinner === "Player1";
+      const p2Won = matchWinner === "Player2";
+
+      const p1Elo = player1Doc.elo ?? 1500;
+      const p2Elo = player2Doc.elo ?? 1500;
+
+      const { newElo: p1NewElo, change: p1Change } = calculateElo(
+        p1Elo,
+        p2Elo,
+        p1Won,
+      );
+      const { newElo: p2NewElo, change: p2Change } = calculateElo(
+        p2Elo,
+        p1Elo,
+        p2Won,
+      );
+
+      player1Doc.elo = p1NewElo;
+      player1Doc.eloHistory.push({
+        matchId: savedMatch.matchId,
+        elo: p1NewElo,
+        change: p1Change,
+        opponent: player2Doc.gamertag,
+        won: p1Won,
+        date: new Date(),
+      });
+
+      player2Doc.elo = p2NewElo;
+      player2Doc.eloHistory.push({
+        matchId: savedMatch.matchId,
+        elo: p2NewElo,
+        change: p2Change,
+        opponent: player1Doc.gamertag,
+        won: p2Won,
+        date: new Date(),
+      });
+
+      await player1Doc.save();
+      await player2Doc.save();
+    }
+
     res.status(201).json(match);
   } catch (err) {
     res
@@ -297,6 +352,33 @@ router.delete("/:matchId", async (req, res) => {
     if (!match) return res.status(404).json({ message: "Match not found" });
 
     await Match.findOneAndDelete({ matchId: req.params.matchId });
+
+    // In DELETE /:matchId
+    // After finding the match, before deleting:
+    if (match.player1 !== "Random" && match.player2 !== "Random") {
+      const p1Doc = await Player.findOne({ gamertag: match.player1 });
+      const p2Doc = await Player.findOne({ gamertag: match.player2 });
+      if (p1Doc) {
+        const entry = p1Doc.eloHistory.find((e) => e.matchId === match.matchId);
+        if (entry) {
+          p1Doc.elo = (p1Doc.elo ?? 1500) - entry.change;
+          p1Doc.eloHistory = p1Doc.eloHistory.filter(
+            (e) => e.matchId !== match.matchId,
+          );
+          await p1Doc.save();
+        }
+      }
+      if (p2Doc) {
+        const entry = p2Doc.eloHistory.find((e) => e.matchId === match.matchId);
+        if (entry) {
+          p2Doc.elo = (p2Doc.elo ?? 1500) - entry.change;
+          p2Doc.eloHistory = p2Doc.eloHistory.filter(
+            (e) => e.matchId !== match.matchId,
+          );
+          await p2Doc.save();
+        }
+      }
+    }
 
     await Player.findOneAndUpdate(
       { gamertag: match.player1 },

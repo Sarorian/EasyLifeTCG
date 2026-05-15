@@ -1,0 +1,400 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&display=swap");
+
+.elo-page {
+  min-height: 100vh;
+  background: #0a0e17;
+  font-family: "Cinzel", "Georgia", serif;
+  color: #c8aa6e;
+  padding-bottom: 80px;
+}
+
+.elo-header {
+  background: linear-gradient(180deg, #060910 0%, #0a0e17 100%);
+  border-bottom: 1px solid rgba(200, 155, 60, 0.267);
+  padding: 32px 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.elo-header-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c89b3c, transparent);
+}
+
+.elo-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #c89b3c;
+  margin: 0;
+  text-shadow: 0 0 40px rgba(200, 155, 60, 0.4);
+}
+
+.elo-sub {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #5b5a56;
+  margin-top: 6px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+}
+
+.elo-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px 0;
+}
+
+/* ── Podium ── */
+.elo-podium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 40px;
+  height: 280px;
+}
+
+.elo-podium-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  flex: 1;
+  max-width: 200px;
+}
+
+.elo-podium-card:hover {
+  transform: translateY(-4px);
+}
+
+.elo-podium-crown {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.elo-podium-rank {
+  font-size: 32px;
+  font-weight: 700;
+  color: #5b5a56;
+  margin-bottom: 6px;
+}
+
+.elo-rank-gold {
+  color: #c89b3c;
+  text-shadow: 0 0 20px rgba(200, 155, 60, 0.5);
+}
+
+.elo-podium-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #c8aa6e;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.elo-podium-elo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #c8aa6e;
+  margin-bottom: 4px;
+}
+
+.elo-elo-gold {
+  color: #c89b3c;
+  text-shadow: 0 0 20px rgba(200, 155, 60, 0.4);
+}
+
+.elo-podium-record {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 12px;
+  color: #5b5a56;
+  margin-bottom: 12px;
+}
+
+.elo-podium-block {
+  width: 100%;
+  border-radius: 2px 2px 0 0;
+}
+
+.elo-podium-block-1 {
+  height: 100px;
+  background: linear-gradient(
+    180deg,
+    rgba(200, 155, 60, 0.4) 0%,
+    rgba(200, 155, 60, 0.1) 100%
+  );
+  border-top: 2px solid #c89b3c;
+}
+.elo-podium-block-2 {
+  height: 70px;
+  background: linear-gradient(
+    180deg,
+    rgba(138, 155, 168, 0.3) 0%,
+    rgba(138, 155, 168, 0.05) 100%
+  );
+  border-top: 2px solid #8a9ba8;
+}
+.elo-podium-block-3 {
+  height: 50px;
+  background: linear-gradient(
+    180deg,
+    rgba(160, 82, 45, 0.3) 0%,
+    rgba(160, 82, 45, 0.05) 100%
+  );
+  border-top: 2px solid #a0522d;
+}
+
+/* ── Sections ── */
+.elo-section {
+  background: #0d1220;
+  border: 1px solid #1e2d45;
+  border-top: 2px solid rgba(200, 155, 60, 0.533);
+  border-radius: 2px;
+  padding: 24px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.elo-section-corner-tr {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 16px;
+  height: 16px;
+  border-top: 2px solid #c89b3c;
+  border-right: 2px solid #c89b3c;
+}
+
+.elo-section-corner-bl {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 16px;
+  height: 16px;
+  border-bottom: 2px solid rgba(200, 155, 60, 0.267);
+  border-left: 2px solid rgba(200, 155, 60, 0.267);
+}
+
+.elo-section-title {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #c89b3c;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #1e2d45;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+}
+
+/* ── Table ── */
+.elo-table-header {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px 100px 80px;
+  gap: 8px;
+  padding: 8px 12px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #5b5a56;
+  border-bottom: 1px solid #1e2d45;
+  margin-bottom: 4px;
+}
+
+.elo-table-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px 100px 80px;
+  gap: 8px;
+  padding: 12px;
+  background: #080c15;
+  border: 1px solid #1e2d45;
+  border-radius: 2px;
+  margin-bottom: 6px;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.elo-table-row:hover {
+  border-color: rgba(200, 155, 60, 0.4);
+}
+
+.elo-rank-num {
+  font-family: "Cinzel", serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #5b5a56;
+}
+
+.elo-gold {
+  color: #c89b3c;
+  text-shadow: 0 0 10px rgba(200, 155, 60, 0.3);
+}
+.elo-silver {
+  color: #8a9ba8;
+}
+.elo-bronze {
+  color: #a0522d;
+}
+
+.elo-player-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #c8aa6e;
+  letter-spacing: 1px;
+}
+
+.elo-score {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #c8aa6e;
+}
+
+.elo-record {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  color: #5b5a56;
+  font-weight: 600;
+}
+
+.elo-last-change {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* ── History ── */
+.elo-history-player {
+  border: 1px solid #1e2d45;
+  border-radius: 2px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.elo-history-name {
+  padding: 10px 16px;
+  background: #080c15;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #c89b3c;
+  letter-spacing: 2px;
+  cursor: pointer;
+  border-bottom: 1px solid #1e2d45;
+}
+
+.elo-history-name:hover {
+  color: #e8bb5c;
+}
+
+.elo-history-entries {
+  padding: 8px 0;
+}
+
+.elo-history-entry {
+  display: grid;
+  grid-template-columns: 1fr 30px 80px 60px;
+  gap: 8px;
+  padding: 8px 16px;
+  align-items: center;
+  border-bottom: 1px solid rgba(30, 45, 69, 0.5);
+}
+
+.elo-history-entry:last-child {
+  border-bottom: none;
+}
+
+.elo-history-opp {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  color: #c8aa6e;
+  font-weight: 600;
+}
+
+.elo-history-result {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.elo-history-elo {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #c8aa6e;
+  text-align: right;
+}
+
+.elo-history-change {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.elo-win {
+  color: #27ae60;
+}
+.elo-loss {
+  color: #c0392b;
+}
+
+.elo-empty {
+  font-family: "Rajdhani", sans-serif;
+  color: #5b5a56;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px 0;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .elo-container {
+    padding: 20px 12px 0;
+  }
+  .elo-podium {
+    height: 220px;
+  }
+  .elo-podium-elo {
+    font-size: 18px;
+  }
+  .elo-podium-name {
+    font-size: 13px;
+  }
+
+  .elo-table-header,
+  .elo-table-row {
+    grid-template-columns: 40px 1fr 70px 80px;
+  }
+
+  .elo-table-header span:last-child,
+  .elo-table-row span:last-child {
+    display: none;
+  }
+
+  .elo-history-entry {
+    grid-template-columns: 1fr 30px 60px;
+  }
+
+  .elo-history-entry span:nth-child(3) {
+    display: none;
+  }
+}

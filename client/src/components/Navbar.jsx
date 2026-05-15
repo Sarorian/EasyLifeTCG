@@ -8,6 +8,7 @@ const links = [
   { to: "/players", label: "Players" },
   { to: "/legends", label: "Legends" },
   { to: "/admin", label: "Admin" },
+  { to: "/elo", label: "ELO" },
 ];
 
 export default function Navbar() {

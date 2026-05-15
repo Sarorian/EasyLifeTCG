@@ -164,6 +164,7 @@ export default function PlayerProfile() {
             { label: "Win Rate", value: `${player.winRate}%`, gold: true },
             { label: "Top Legend", value: mostPlayedLegend.split(",")[0] },
             { label: "Top Archetype", value: mostPlayedArchetype },
+            { label: "ELO", value: player.elo ?? 1500, gold: true },
           ].map(({ label, value, gold }) => (
             <div key={label} className="pp-stat-card">
               <div className={`pp-stat-value ${gold ? "pp-stat-gold" : ""}`}>
