@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+} from "recharts";
 
 import "./PlayerProfile.css";
 
@@ -174,6 +183,263 @@ export default function PlayerProfile() {
             </div>
           ))}
         </div>
+
+        {/* ── ELO Graph ── */}
+        {player.eloHistory && player.eloHistory.length > 0 && (
+          <div className="pp-section">
+            <div className="pp-section-corner-tr" />
+            <div className="pp-section-corner-bl" />
+            <div className="pp-section-title">ELO History</div>
+
+            {/* Peak / Low / Current summary */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "12px",
+                marginBottom: "24px",
+              }}
+            >
+              {[
+                { label: "Current ELO", value: player.elo ?? 1000, gold: true },
+                {
+                  label: "Peak ELO",
+                  value: Math.max(...player.eloHistory.map((e) => e.elo)),
+                },
+                {
+                  label: "Lowest ELO",
+                  value: Math.min(...player.eloHistory.map((e) => e.elo)),
+                },
+              ].map(({ label, value, gold }) => (
+                <div
+                  key={label}
+                  style={{
+                    background: "#080C15",
+                    border: "1px solid #1E2D45",
+                    borderTop: "2px solid rgba(200,155,60,0.4)",
+                    borderRadius: "2px",
+                    padding: "16px",
+                    textAlign: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "24px",
+                      fontWeight: "700",
+                      color: gold ? "#C89B3C" : "#C8AA6E",
+                      marginBottom: "4px",
+                      textShadow: gold
+                        ? "0 0 20px rgba(200,155,60,0.3)"
+                        : "none",
+                    }}
+                  >
+                    {value}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: "'Rajdhani', sans-serif",
+                      fontSize: "10px",
+                      letterSpacing: "2px",
+                      textTransform: "uppercase",
+                      color: "#5B5A56",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {label}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Chart */}
+            <div style={{ width: "100%", height: "200px" }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={[
+                    { matchId: "Start", elo: 1000 },
+                    ...player.eloHistory.map((e) => ({
+                      matchId: `#${e.matchId}`,
+                      elo: e.elo,
+                      change: e.change,
+                      opponent: e.opponent,
+                      won: e.won,
+                    })),
+                  ]}
+                  margin={{ top: 8, right: 16, left: 0, bottom: 0 }}
+                >
+                  <XAxis
+                    dataKey="matchId"
+                    tick={{
+                      fontFamily: "'Rajdhani', sans-serif",
+                      fontSize: 11,
+                      fill: "#5B5A56",
+                    }}
+                    axisLine={{ stroke: "#1E2D45" }}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    domain={["auto", "auto"]}
+                    tick={{
+                      fontFamily: "'Rajdhani', sans-serif",
+                      fontSize: 11,
+                      fill: "#5B5A56",
+                    }}
+                    axisLine={false}
+                    tickLine={false}
+                    width={40}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      background: "#0D1220",
+                      border: "1px solid #1E2D45",
+                      borderRadius: "2px",
+                      fontFamily: "'Rajdhani', sans-serif",
+                      color: "#C8AA6E",
+                    }}
+                    formatter={(value, name, props) => {
+                      const { opponent, change, won } = props.payload;
+                      return [
+                        <span>
+                          <span style={{ color: "#C89B3C", fontWeight: "700" }}>
+                            {value}
+                          </span>
+                          {change !== undefined && (
+                            <span
+                              style={{
+                                color: change >= 0 ? "#27AE60" : "#C0392B",
+                                marginLeft: "8px",
+                              }}
+                            >
+                              {change >= 0 ? "+" : ""}
+                              {change}
+                            </span>
+                          )}
+                          {opponent && (
+                            <span
+                              style={{ color: "#5B5A56", marginLeft: "8px" }}
+                            >
+                              vs {opponent} · {won ? "W" : "L"}
+                            </span>
+                          )}
+                        </span>,
+                        "ELO",
+                      ];
+                    }}
+                    labelStyle={{
+                      color: "#5B5A56",
+                      fontSize: "11px",
+                      letterSpacing: "1px",
+                    }}
+                  />
+                  <ReferenceLine
+                    y={1000}
+                    stroke="#1E2D45"
+                    strokeDasharray="4 4"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="elo"
+                    stroke="#C89B3C"
+                    strokeWidth={2}
+                    dot={(props) => {
+                      const { cx, cy, payload } = props;
+                      if (payload.matchId === "Start") return null;
+                      return (
+                        <circle
+                          key={payload.matchId}
+                          cx={cx}
+                          cy={cy}
+                          r={4}
+                          fill={payload.won ? "#27AE60" : "#C0392B"}
+                          stroke="#0D1220"
+                          strokeWidth={2}
+                        />
+                      );
+                    }}
+                    activeDot={{
+                      r: 6,
+                      fill: "#C89B3C",
+                      stroke: "#0D1220",
+                      strokeWidth: 2,
+                    }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: "16px",
+                justifyContent: "center",
+                marginTop: "12px",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "'Rajdhani', sans-serif",
+                  fontSize: "12px",
+                  color: "#27AE60",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <span
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    background: "#27AE60",
+                    display: "inline-block",
+                  }}
+                />{" "}
+                Win
+              </span>
+              <span
+                style={{
+                  fontFamily: "'Rajdhani', sans-serif",
+                  fontSize: "12px",
+                  color: "#C0392B",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <span
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    background: "#C0392B",
+                    display: "inline-block",
+                  }}
+                />{" "}
+                Loss
+              </span>
+              <span
+                style={{
+                  fontFamily: "'Rajdhani', sans-serif",
+                  fontSize: "12px",
+                  color: "#5B5A56",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <span
+                  style={{
+                    width: "24px",
+                    height: "1px",
+                    background: "#1E2D45",
+                    display: "inline-block",
+                    borderTop: "1px dashed #1E2D45",
+                  }}
+                />{" "}
+                Baseline (1000)
+              </span>
+            </div>
+          </div>
+        )}
 
         <div className="pp-grid-2">
           <div className="pp-section">

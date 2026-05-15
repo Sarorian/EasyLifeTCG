@@ -41,7 +41,7 @@ export default function EloLeaderboard() {
         <div className="elo-header-glow" />
         <h1 className="elo-title">ELO Rankings</h1>
         <p className="elo-sub">
-          {players.length} ranked players · Starting ELO 1500 · K-Factor 32
+          {players.length} ranked players · Starting ELO 100 · K-Factor 32
         </p>
       </div>
 
@@ -124,7 +124,7 @@ export default function EloLeaderboard() {
                 </span>
                 <span className="elo-player-name">{p.gamertag}</span>
                 <span className={`elo-score ${i === 0 ? "elo-gold" : ""}`}>
-                  {p.elo ?? 1500}
+                  {p.elo ?? 1000}
                 </span>
                 <span className="elo-record">
                   {p.wins}W — {p.losses}L
